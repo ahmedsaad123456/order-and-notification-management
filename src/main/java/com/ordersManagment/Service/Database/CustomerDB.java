@@ -19,6 +19,37 @@ public class CustomerDB extends Database{
         customers = new ArrayList<>();
     }
 
+    public static void createInstance(Customer customer){ // save
+        customers.add(customer);
+    }
 
+    //public static void delete(Customer customer) { customers.remove(customer); }
+
+    public static Customer getInstance(int ID){
+        for (Customer customer : customers) {
+            if (customer.getID() == ID) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    public static Customer getCustomerByName(String name){
+        for (Customer customer : customers) {
+            if (customer.getName().equals(name)) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    public static Customer getCustomerByEmail(String email){
+        for (Customer customer : customers) {
+            if (customer.getEmail().equals(email)) {
+                return customer;
+            }
+        }
+        return null;
+    }
 
 }
