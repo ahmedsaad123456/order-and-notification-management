@@ -18,11 +18,8 @@ public class ProductController {
 
 
 
-
-
     @PostMapping(value = "/product")
     public String addProduct(@RequestBody Product p){
-
         return pService.addProduct(p);
 
     }

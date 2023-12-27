@@ -13,8 +13,17 @@ public class ProductService {
 
     public String addProduct(Product p){
 
+        ArrayList<Product> products = ProductDB.getProducts();
+        for (Product product : products) {
+            if (product.getName().equals(p.getName())) {
+                product.setAmount(product.getAmount()+1);
+                return "increased amount +1";
+            }
+        }
 
-        ProductDB.getProducts().add(p);
+        p.setAmount(1);
+
+        products.add(p);
 
         return "Added Successfully";
     }
