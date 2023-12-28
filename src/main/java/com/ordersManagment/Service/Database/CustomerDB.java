@@ -27,12 +27,10 @@ public class CustomerDB extends Database{
         return null;
     }
 
-    public static Customer getdCustomerByID(int ID){
+    public static Customer getCustomerByID(int ID){
         CustomerDB customerDB = new CustomerDB();
         return customerDB.getInstance(ID);
     }
-
-
 
     public static Customer getCustomerByName(String name){
         for (Customer customer : customers) {
