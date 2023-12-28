@@ -1,5 +1,6 @@
 package com.ordersManagment.Service.Model;
 
+import com.ordersManagment.Service.Enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,10 @@ import java.util.ArrayList;
 
 public class Order {
 
-    private ArrayList<Product> products;
+    protected ArrayList<Product> products;
+    protected Customer customer;
+    protected int OrderID;
+    protected OrderStatus orderStatus;
 
-    private int OrderID;
-
-    private Status status;
 
 }

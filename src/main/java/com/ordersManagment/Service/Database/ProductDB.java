@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 @Setter
 
-public class ProductDB extends Database{
+public class ProductDB extends Database {
 
     @Getter
     private static ArrayList<Product> products;
@@ -19,4 +19,17 @@ public class ProductDB extends Database{
         products = new ArrayList<>();
     }
 
+    @Override
+    public void createInstance(Object object) {
+
+    }
+
+    public static void reduceProductAmount(String serialNumber, int amount) {
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getSerialNumber().equals(serialNumber)) {
+                products.get(i).setAmount(products.get(i).getAmount() - amount);
+                break;
+            }
+        }
+    }
 }

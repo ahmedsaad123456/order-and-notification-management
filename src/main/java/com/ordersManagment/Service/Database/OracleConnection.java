@@ -6,4 +6,9 @@ public class OracleConnection implements DatabaseConnection{
     public void connect() {
         // connect to oracle database
     }
+
+    @Override
+    public void disconnect() {
+        // disconnect from oracle database
+    }
 }

@@ -6,4 +6,9 @@ public class MySqlConnection implements DatabaseConnection{
     public void connect() {
         // connect to the MySql database
     }
+
+    @Override
+    public void disconnect() {
+        // disconnect from the MySql database
+    }
 }

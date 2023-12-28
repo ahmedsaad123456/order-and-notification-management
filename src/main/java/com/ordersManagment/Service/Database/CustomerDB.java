@@ -11,7 +11,6 @@ import java.util.ArrayList;
 @Setter
 public class CustomerDB extends Database{
 
-
     @Getter
     private static ArrayList<Customer> customers;
 
@@ -19,6 +18,45 @@ public class CustomerDB extends Database{
         customers = new ArrayList<>();
     }
 
+    public static Customer getInstance(int ID){
+        for (Customer customer : customers) {
+            if (customer.getID() == ID) {
+                return customer;
+            }
+        }
+        return null;
+    }
 
+    public static Customer getCustomerByID(int ID){
+        CustomerDB customerDB = new CustomerDB();
+        return customerDB.getInstance(ID);
+    }
 
+    public static Customer getCustomerByName(String name){
+        for (Customer customer : customers) {
+            if (customer.getName().equals(name)) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    public static Customer getCustomerByEmail(String email){
+        for (Customer customer : customers) {
+            if (customer.getEmail().equals(email)) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void createInstance(Object object) {
+        customers.add((Customer) object);
+    }
+
+    public static void saveCustomer (Object object){ // called from service
+        CustomerDB customerDB = new CustomerDB();
+        customerDB.createInstance(object);
+    }
 }
