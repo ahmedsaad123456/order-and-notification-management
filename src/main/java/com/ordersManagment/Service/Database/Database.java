@@ -21,8 +21,4 @@ public abstract class Database {
         connection.disconnect();
     }
 
-    public abstract void createInstance(Object object);
-
-    public abstract Object getInstance(int ID);
-
 }
