@@ -23,5 +23,6 @@ public abstract class Database {
 
     public abstract void createInstance(Object object);
 
+    public abstract Object getInstance(int ID);
 
 }

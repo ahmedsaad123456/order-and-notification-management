@@ -18,7 +18,7 @@ public class CustomerDB extends Database{
         customers = new ArrayList<>();
     }
 
-    public static Customer getInstance(int ID){
+    public  Customer getInstance(int ID){
         for (Customer customer : customers) {
             if (customer.getID() == ID) {
                 return customer;
@@ -26,6 +26,13 @@ public class CustomerDB extends Database{
         }
         return null;
     }
+
+    public static Customer getdCustomerByID(int ID){
+        CustomerDB customerDB = new CustomerDB();
+        return customerDB.getInstance(ID);
+    }
+
+
 
     public static Customer getCustomerByName(String name){
         for (Customer customer : customers) {
@@ -50,7 +57,7 @@ public class CustomerDB extends Database{
         customers.add((Customer) object);
     }
 
-    public static void save(Object object){ // called from service
+    public static void saveCustomer (Object object){ // called from service
         CustomerDB customerDB = new CustomerDB();
         customerDB.createInstance(object);
     }
