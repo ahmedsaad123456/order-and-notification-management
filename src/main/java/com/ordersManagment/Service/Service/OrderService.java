@@ -76,14 +76,18 @@ public class OrderService {
                 }
             }
         }
-        CompundOrder order = new CompundOrder();
+        CompundOrder order = null;
         for (int i = 0; i < orderList.size(); i++) {
-            order.setProducts(orderList.get(i).getProducts());
             ArrayList<Order> orders = new ArrayList<>();
             orders.add(order);
             CompundOrder newOrder = new CompundOrder(orders);
             order = newOrder;
+            order.setProducts(orderList.get(i).getProducts());
+            order.setOrderID(OrderDB.getNextID());
+            order.setOrderStatus(OrderStatus.PLACED);
+            order.setCustomer(orderList.get(i).getCustomer());
         }
+        OrderDB.addOrder(order);
         return true;
     }
 
