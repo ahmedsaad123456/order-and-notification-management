@@ -11,19 +11,12 @@ import java.util.ArrayList;
 @Setter
 public class CustomerDB extends Database{
 
-
     @Getter
     private static ArrayList<Customer> customers;
 
     static {
         customers = new ArrayList<>();
     }
-
-    public static void createInstance(Customer customer){ // save
-        customers.add(customer);
-    }
-
-    //public static void delete(Customer customer) { customers.remove(customer); }
 
     public static Customer getInstance(int ID){
         for (Customer customer : customers) {
@@ -52,4 +45,13 @@ public class CustomerDB extends Database{
         return null;
     }
 
+    @Override
+    public void createInstance(Object object) {
+        customers.add((Customer) object);
+    }
+
+    public static void save(Object object){ // called from service
+        CustomerDB customerDB = new CustomerDB();
+        customerDB.createInstance(object);
+    }
 }

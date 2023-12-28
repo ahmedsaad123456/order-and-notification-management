@@ -9,13 +9,19 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Database {
-
+public abstract class Database {
 
     private DatabaseConnection connection;
 
+    public void connect(){
+        connection.connect();
+    }
 
+    public void disconnect(){
+        connection.disconnect();
+    }
 
+    public abstract void createInstance(Object object);
 
 
 }

@@ -1,5 +1,6 @@
 package com.ordersManagment.Service.Model;
 
+import com.ordersManagment.Service.Enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,6 @@ public class Order {
 
     private int OrderID;
 
-    private Status status;
+    private OrderStatus status;
 
 }

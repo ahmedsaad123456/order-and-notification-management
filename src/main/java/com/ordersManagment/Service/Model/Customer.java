@@ -1,5 +1,6 @@
 package com.ordersManagment.Service.Model;
 
+import com.ordersManagment.Service.Enums.Language;
 import lombok.*;
 
 @Getter
@@ -7,7 +8,7 @@ import lombok.*;
 @RequiredArgsConstructor
 @NoArgsConstructor
 
-
+@AllArgsConstructor
 public class Customer {
 
     private int ID;
@@ -31,7 +32,7 @@ public class Customer {
     private String password;
 
     @NonNull
-    private String language;
+    private Language language;
 
     private int orderID;
 
