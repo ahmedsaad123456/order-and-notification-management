@@ -31,7 +31,6 @@ public class OrderService {
     }
 
     public boolean checkCompoundOrderAvailability(ArrayList<Order> orderList) {
-        ArrayList<Product> availableProducts = ProductDB.getProducts();
         ArrayList<Product> requestedProducts = new ArrayList<>();
         for (int i = 0; i < orderList.size(); i++) {
             ArrayList<Product> currentOrder = orderList.get(i).getProducts();
