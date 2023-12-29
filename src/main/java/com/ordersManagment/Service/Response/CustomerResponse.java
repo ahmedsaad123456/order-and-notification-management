@@ -10,27 +10,27 @@ import lombok.*;
  * used to return response to the user
  */
 
-public class CustomerResponse {
-    private boolean status;
-    private String message;
-    private String errorMessage;
+public class CustomerResponse extends Response {
+
     Customer customer;
 
+    //------------------------------------------------------------------------------------------------------------
+
     public CustomerResponse(boolean b, String s, Customer customer) {
-        this.status = b;
-        this.message = s;
+        super(b, s);
         this.customer = customer;
     }
 
+    //------------------------------------------------------------------------------------------------------------
+
     public CustomerResponse(boolean b, String s) {
-        this.status = b;
-        this.message = s;
+        super(b, s);
     }
 
+    //------------------------------------------------------------------------------------------------------------
+
     public CustomerResponse(boolean b, String s, String errorMessage) {
-        this.status = b;
-        this.message = s;
-        this.errorMessage = errorMessage;
+        super(b, s, errorMessage);
     }
 
 
