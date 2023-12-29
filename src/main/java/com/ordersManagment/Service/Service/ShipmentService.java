@@ -1,10 +1,8 @@
 package com.ordersManagment.Service.Service;
 
-import com.ordersManagment.Service.Database.CustomerDB;
 import com.ordersManagment.Service.Database.OrderDB;
-import com.ordersManagment.Service.Model.CompundOrder;
+import com.ordersManagment.Service.Model.CompoundOrder;
 import com.ordersManagment.Service.Model.Order;
-import com.ordersManagment.Service.Model.SimpleOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +26,8 @@ public class ShipmentService {
 
     public void shipCompoundOrder(int orderID) {
         Order compoundOrder = OrderDB.getInstance(orderID);
-        numberOfOrders = ((CompundOrder) compoundOrder).getOrders().size();
-        for (Order simpleOrder : ((CompundOrder) compoundOrder).getOrders()) {
+        numberOfOrders = ((CompoundOrder) compoundOrder).getOrders().size();
+        for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
             shipSimpleOrder(simpleOrder.getOrderID());
         }
     }
@@ -43,8 +41,8 @@ public class ShipmentService {
 
     public void cancelCompoundOrderShipment(int orderID) {
         Order compoundOrder = OrderDB.getInstance(orderID);
-        numberOfOrders = ((CompundOrder) compoundOrder).getOrders().size();
-        for (Order order : ((CompundOrder) compoundOrder).getOrders()) {
+        numberOfOrders = ((CompoundOrder) compoundOrder).getOrders().size();
+        for (Order order : ((CompoundOrder) compoundOrder).getOrders()) {
             cancelSimpleOrderShipment(order.getOrderID());
         }
     }

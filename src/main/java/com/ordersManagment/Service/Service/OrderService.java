@@ -4,17 +4,19 @@ import com.ordersManagment.Service.Database.CustomerDB;
 import com.ordersManagment.Service.Database.OrderDB;
 import com.ordersManagment.Service.Database.ProductDB;
 import com.ordersManagment.Service.Enums.OrderStatus;
-import com.ordersManagment.Service.Model.CompundOrder;
+import com.ordersManagment.Service.Model.CompoundOrder;
 import com.ordersManagment.Service.Model.Order;
 import com.ordersManagment.Service.Model.Product;
 import com.ordersManagment.Service.Model.SimpleOrder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.Queue;
 
 @Service
 public class OrderService {
+    AccountService accountService;
+
     public boolean checkSimpleOrderAvailability(ArrayList<Product> orderList) {
         ArrayList<Product> availableProducts = ProductDB.getProducts();
         for (int i = 0; i < orderList.size(); i++) {
@@ -76,16 +78,19 @@ public class OrderService {
                 }
             }
         }
-        CompundOrder order = null;
+        CompoundOrder order = new CompoundOrder();
         for (int i = 0; i < orderList.size(); i++) {
-            ArrayList<Order> orders = new ArrayList<>();
-            orders.add(order);
-            CompundOrder newOrder = new CompundOrder(orders);
-            order = newOrder;
-            order.setProducts(orderList.get(i).getProducts());
-            order.setOrderID(OrderDB.getNextID());
-            order.setOrderStatus(OrderStatus.PLACED);
-            order.setCustomer(orderList.get(i).getCustomer());
+            if (orderList.get(i).getCustomer().getID() == customerID) {
+                order.setProducts(orderList.get(i).getProducts());
+                order.setOrderID(OrderDB.getNextID());
+                order.setOrderStatus(OrderStatus.PLACED);
+                order.setCustomer(orderList.get(i).getCustomer());
+            } else {
+                Order newOrder = orderList.get(i);
+                newOrder.setOrderID(OrderDB.getNextID());
+                newOrder.setOrderStatus(OrderStatus.PLACED);
+                order.addOrder(newOrder);
+            }
         }
         OrderDB.addOrder(order);
         return true;
@@ -99,8 +104,32 @@ public class OrderService {
         return orderSum;
     }
 
-    public boolean cancelOrder(Order order) {
+    public void cancelSimpleOrder(int orderID) {
+        SimpleOrder order = (SimpleOrder) OrderDB.getInstance(orderID);
+        ArrayList<Product> orderProducts = order.getProducts();
+        for (int i = 0; i < orderProducts.size(); i++) {
+            ProductDB.increaseProductAmount(orderProducts.get(i).getSerialNumber(), orderProducts.get(i).getAmount());
+        }
+        accountService.addToAccount(order.getCustomer().getID(), calcutateOrder(orderProducts));
+        OrderDB.deleteOrder(orderID);
+    }
 
-        return true;
+    public void cancelCompoundOrder(int orderID) {
+        CompoundOrder order = (CompoundOrder) OrderDB.getInstance(orderID);
+        ArrayList<CompoundOrder> orderQueue = new ArrayList<>();
+        orderQueue.add(order);
+        while (!orderQueue.isEmpty()) {
+            ArrayList<Order> orders = orderQueue.get(0).getOrders();
+            for (int i = 0; i < orders.size(); i++) {
+                orderQueue.add((CompoundOrder) orders.get(i));
+            }
+            ArrayList<Product> orderProducts = orderQueue.get(0).getProducts();
+            for (int i = 0; i < orderProducts.size(); i++) {
+                ProductDB.increaseProductAmount(orderProducts.get(i).getSerialNumber(), orderProducts.get(i).getAmount());
+            }
+            accountService.addToAccount(orderQueue.get(0).getCustomer().getID(), calcutateOrder(orderProducts));
+            orderQueue.removeFirst();
+        }
+        OrderDB.deleteOrder(orderID);
     }
 }

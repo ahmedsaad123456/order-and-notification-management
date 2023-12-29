@@ -32,4 +32,8 @@ public class ProductDB extends Database {
             }
         }
     }
+
+    public static void increaseProductAmount(String serialNumber, int amount) {
+        reduceProductAmount(serialNumber, -amount);
+    }
 }

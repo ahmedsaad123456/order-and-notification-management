@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class CompundOrder extends Order{
+public class CompoundOrder extends Order{
 
     private ArrayList<Order> orders;
 

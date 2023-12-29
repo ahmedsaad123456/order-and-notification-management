@@ -39,7 +39,7 @@ public class OrderController {
         return response;
     }
 
-    @PostMapping("/add-complex-order")
+    @PostMapping("/add-compound-order")
     public Response addComplexOrder(@RequestBody ArrayList<Order> orderList, int customerID) {
         Response response = new Response();
         if (!orderService.checkCompoundOrderAvailability(orderList)) {
@@ -64,10 +64,21 @@ public class OrderController {
         return response;
     }
 
-    @DeleteMapping("/delete-order")
-    public Response deleteOrder(@RequestHeader int OrderID) {
+    @DeleteMapping("/delete-simple-order")
+    public Response deleteSimpleOrder(@RequestHeader int orderID) {
         Response response = new Response();
+        orderService.cancelSimpleOrder(orderID);
+//        response.setStatus(true);
+//        response.setMessage("Canceled");
+        return response;
+    }
 
+    @DeleteMapping("/delete-compound-order")
+    public Response deleteCompoundOrder(@RequestHeader int orderID) {
+        Response response = new Response();
+        orderService.cancelCompoundOrder(orderID);
+//        response.setStatus(true);
+//        response.setMessage("Canceled");
         return response;
     }
 }

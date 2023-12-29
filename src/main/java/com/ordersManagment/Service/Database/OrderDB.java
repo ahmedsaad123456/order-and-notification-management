@@ -41,6 +41,10 @@ public class OrderDB extends Database{
         nextID++;
     }
 
+    public static void deleteOrder(int orderID){
+        orders.remove(getInstance(orderID));
+    }
+
     public static Customer getCustomer(Order order){
         return order.getCustomer();
     }
