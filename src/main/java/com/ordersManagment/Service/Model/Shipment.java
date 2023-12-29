@@ -1,9 +1,9 @@
 package com.ordersManagment.Service.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+
+import java.sql.Time;
 
 @Getter
 @Setter
@@ -11,8 +11,30 @@ import lombok.Setter;
 
 @AllArgsConstructor
 public class Shipment {
-    int shipmentID;
+    @JsonProperty("shipmentID")
+    private int shipmentID;
+
+    private static int shipmentIDCounter = 1;
+    @JsonProperty("orderID")
+    @NonNull
     int orderID;
-    String shipmentDate;
+    @JsonProperty("shipmentTime")
+    @NonNull
+    Time shipmentTime;
+    @JsonProperty("shipmentAddress")
+    @NonNull
     String shipmentAddress;
+
+    public Shipment() {
+        this.shipmentID = getStaticShipmentID();
+        incrementShipmentID();
+    }
+
+    private static void incrementShipmentID() {
+        shipmentIDCounter++;
+    }
+    public static int getStaticShipmentID() {
+        return shipmentIDCounter;
+    }
+
 }
