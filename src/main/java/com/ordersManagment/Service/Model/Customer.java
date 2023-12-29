@@ -2,6 +2,7 @@ package com.ordersManagment.Service.Model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ordersManagment.Service.Enums.Language;
+import com.ordersManagment.Service.Enums.notificationChannel;
 import lombok.*;
 
 @Getter
@@ -27,9 +28,9 @@ public class Customer {
     @NonNull
     private String email;
 
-    @JsonProperty("location")
+    @JsonProperty("address")
     @NonNull
-    private String location;
+    private String address;
 
     @JsonProperty("balance")
     @NonNull
@@ -43,6 +44,10 @@ public class Customer {
     @NonNull
     private Language language;
 
+    @JsonProperty("preferredChannel")
+    @NonNull
+    private notificationChannel preferredChannel;
+
     @JsonProperty("orderID")
     private int orderID;
 
@@ -53,6 +58,10 @@ public class Customer {
     public void setLanguage(String language) {
         this.language = Language.valueOf(language);
     }
+
+    public String getPreferredChannel() { return preferredChannel.toString(); }
+
+    public void setPreferredChannel(String Channel){this.preferredChannel = notificationChannel.valueOf(Channel);}
 
 
 }

@@ -1,6 +1,7 @@
 package com.ordersManagment.Service.Controller;
 
 import com.ordersManagment.Service.Database.CustomerDB;
+import com.ordersManagment.Service.Model.Address;
 import com.ordersManagment.Service.Response.CustomerResponse;
 import com.ordersManagment.Service.Service.CustomerService;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 /**
  * CustomerController class
- * used to sign up, login, get all customers
+ * used to sign up, login, get all customers and get address
  * get help from CustomerService class
  */
 
@@ -32,6 +33,7 @@ public class CustomerController {
     // login
     @GetMapping(value = "/customer/login/{email}/{password}")
     public CustomerResponse login(@PathVariable("email") String email, @PathVariable("password") String password){
+
         return CustomerService.login(email, password);
     }
 
@@ -41,6 +43,15 @@ public class CustomerController {
     @GetMapping(value = "/customer/AllCustomers")
     public ArrayList<Customer> getAllCustomers(){
         return CustomerService.getAllCustomers();
+    }
+
+    //------------------------------------------------------------------------------------------------------------
+
+    @GetMapping(value = "/customer/Address/{email}")
+    public Address getAddress(@PathVariable("email") String email){
+
+        System.out.println("email: " + email);
+        return CustomerService.getAddress(email);
     }
 
 }
