@@ -17,8 +17,10 @@ public class Order {
 
     private ArrayList<Product> products;
 
+    private Customer customer;
     private int OrderID;
 
     private OrderStatus status;
+    private String address;
 
 }
