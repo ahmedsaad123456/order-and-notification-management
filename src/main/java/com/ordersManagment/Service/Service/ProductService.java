@@ -1,46 +1,104 @@
 package com.ordersManagment.Service.Service;
 
-import com.ordersManagment.Service.Database.Database;
+
 import com.ordersManagment.Service.Database.ProductDB;
 import com.ordersManagment.Service.Model.Product;
+import com.ordersManagment.Service.Response.ProductResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+
+/**
+ * ProductService class
+ *
+ * used to add product assuming that the same product has the same serial number
+ * so if we add product with serial number is already exist in the database
+ * the amount of this product will increase by 1
+ * get product by serial number
+ * get all products
+ * get category
+ *
+ *
+ * get help from ProductDB class
+ *
+ */
 @Service
 public class ProductService {
 
 
-    public String addProduct(Product p){
+    /**
+     * add product assuming that the same product has the same serial number
+     * so if we add product with serial number is already exist in the database
+     * the amount of this product will increase by 1
+     *
+     * @param p product that we want to add it to the database
+     * @return ProductResponse that contains the product object and the two massages
+     * one is increased amount +1 when add product with serial number is already exist
+     * two is Added Successfully when add product with serial number isn't exist
+     */
+    public ProductResponse addProduct(Product p){
 
-        ArrayList<Product> products = ProductDB.getProducts();
-        for (Product product : products) {
-            if (product.getName().equals(p.getName())) {
-                product.setAmount(product.getAmount()+1);
-                return "increased amount +1";
-            }
+        ProductDB.updateCategory(p);
+        int amount = ProductDB.getProductAmountBySerialNumber(p.getSerialNumber());
+
+        if(amount!=0){
+            ProductDB.updateProductAmount(p , amount+1);
+            return new ProductResponse(true , "increased amount +1" , p);
+
+        }
+        else{
+            ProductDB.saveProduct(p);
+            return new ProductResponse(true , "Added Successfully" , p);
+
         }
 
-        p.setAmount(1);
-
-        products.add(p);
-
-        return "Added Successfully";
     }
 
+    //------------------------------------------------------------------------------------------------------------
 
+
+    /**
+     * get all products
+     *
+     * @return all products
+     */
     public ArrayList<Product> getAllProduct(){
         return ProductDB.getProducts();
     }
 
-    public Product getProduct(String name){
+    //------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * get product by serial number
+     *
+     * @param serialNumber of the product that we want to get it
+     * @return ProductResponse true if the product is existed and false if isn't existed
+     */
+    public ProductResponse getProductBySerialNumber(String serialNumber){
+        Product p = ProductDB.getProductBySerialNumber(serialNumber);
         ArrayList<Product> products = ProductDB.getProducts();
-        for (Product product : products) {
-            if (product.getName().equals(name)) {
-                return product;
-            }
+        if(p!= null){
+            return new ProductResponse(true , "product is exist" , p);
         }
 
-        return null;
+        return new ProductResponse(false ,"please enter serial number correctly", "product is not exist");
     }
+
+
+    //------------------------------------------------------------------------------------------------------------
+
+    /**
+     * get categories
+     *
+     * @return all categories
+     */
+
+    public HashMap<String , Integer> getAllCategories(){ return ProductDB.getCategory();}
+
+
+
+
 }
