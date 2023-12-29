@@ -14,25 +14,25 @@ public class ShipmentController {
 
     // Place Simple Order Shipment
     @PostMapping("/place/{orderID}")
-    public ShipmentResponse placeSimpleOrderShipment(@PathVariable int orderID) {
+    public ShipmentResponse placeSimpleOrderShipment(@PathVariable("orderId") int orderID) {
         return shipmentService.shipSimpleOrder(orderID);
     }
 
     // Place Compound Order Shipment
     @PostMapping("/place/compound/{orderID}")
-    public ShipmentResponse placeCompoundOrderShipment(@PathVariable int orderID) {
+    public ShipmentResponse placeCompoundOrderShipment(@PathVariable("orderId") int orderID) {
         return shipmentService.shipCompoundOrder(orderID);
     }
 
     // Cancel Simple Order Shipment
     @DeleteMapping ("/cancel/{shipmentID}")
-    public ShipmentResponse cancelSimpleOrderShipment(@PathVariable int shipmentID) {
+    public ShipmentResponse cancelSimpleOrderShipment(@PathVariable("shipmentID") int shipmentID) {
         return shipmentService.cancelSimpleOrderShipment(shipmentID);
     }
 
     // Cancel Compound Order Shipment
     @DeleteMapping("/cancel/compound/{shipmentID}")
-    public ShipmentResponse cancelCompoundOrderShipment(@PathVariable int shipmentID) {
+    public ShipmentResponse cancelCompoundOrderShipment(@PathVariable("shipmentID") int shipmentID) {
         return shipmentService.cancelCompoundOrderShipment(shipmentID);
     }
 }

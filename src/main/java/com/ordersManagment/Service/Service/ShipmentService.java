@@ -5,6 +5,7 @@ import com.ordersManagment.Service.Database.ShipmentDB;
 import com.ordersManagment.Service.Model.CompundOrder;
 import com.ordersManagment.Service.Model.Order;
 import com.ordersManagment.Service.Model.Shipment;
+import com.ordersManagment.Service.Model.SimpleOrder;
 import com.ordersManagment.Service.Response.ShipmentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class ShipmentService {
      */
     public ShipmentResponse shipSimpleOrder(int orderID) {
         Order order = OrderDB.getInstance(orderID);
-        if (order == null) {
+        if (order == null || !(order instanceof SimpleOrder)) {
             return new ShipmentResponse(false, "Order not found", "Order with ID " + orderID + " not found");
         }
 
