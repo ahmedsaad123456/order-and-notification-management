@@ -1,4 +1,5 @@
 package com.ordersManagment.Service.Service;
+import com.ordersManagment.Service.Model.Address;
 import com.ordersManagment.Service.Response.CustomerResponse;
 import org.springframework.stereotype.Service;
 import com.ordersManagment.Service.Model.Customer;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 /**
  * CustomerService class
  * used to add customer, login, get all customers
- * get help from CustomerDB class
+ * get help from CustomerDB class to access database
  */
 
 public class CustomerService {
@@ -46,10 +47,10 @@ public class CustomerService {
             return new CustomerResponse(false, "Customer not added","Invalid email");
 
 
-        } else if(customer.getLocation().length() < 3){ // location must be at least 3 characters
+        } else if(customer.getAddress().length() < 3){ // location must be at least 3 characters
 
-            System.out.println("Invalid location");
-            return new CustomerResponse(false, "Customer not added","Invalid location");
+            System.out.println("Invalid Address");
+            return new CustomerResponse(false, "Customer not added","Invalid Address");
 
 
         } else if(customer.getPassword().length() < 8){ // password must be at least 8 characters
@@ -74,14 +75,18 @@ public class CustomerService {
 
             Customer c = new Customer();
 
-            // set customer data
+            // set customer data :
+            // name, mobile number, email, address, balance, password, language, preferred channel
+            // remaining data : ID, orderID will be set in other classes
+
             c.setName(customer.getName());
             c.setMobileNumber(customer.getMobileNumber());
             c.setEmail(customer.getEmail());
-            c.setLocation(customer.getLocation());
             c.setBalance(customer.getBalance());
             c.setPassword(customer.getPassword());
             c.setLanguage(customer.getLanguage());
+            c.setAddress(customer.getAddress());
+            c.setPreferredChannel(customer.getPreferredChannel());
 
             CustomerDB.saveCustomer(c); // add customer to database
 
@@ -146,5 +151,25 @@ public class CustomerService {
     }
 
     //------------------------------------------------------------------------------------------------------------
+
+    /**
+     * get address of customer by email
+     * @param email
+     * @return Customer
+     */
+    public static Address getAddress(String email){
+
+        Customer customer = CustomerDB.getCustomerByEmail(email);
+        System.out.println(customer+" "+email);
+        assert customer != null;
+
+        Address a = new Address();
+        a.setALlAddress(customer.getAddress());
+        return a;
+
+    }
+
+    //------------------------------------------------------------------------------------------------------------
+
 
 }
