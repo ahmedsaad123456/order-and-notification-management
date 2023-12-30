@@ -10,7 +10,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @Getter
 @Setter
-@RequestMapping(value = "/api/Auth")
+@RequestMapping(value = "/customer")
 
 /**
  * CustomerController class
@@ -25,7 +25,7 @@ public class CustomerController {
     //------------------------------------------------------------------------------------------------------------
 
     // sign up
-    @PostMapping(value = "/customer/signUp")
+    @PostMapping(value = "/signUp")
     public CustomerResponse signUp(@RequestBody Customer customer){
         return CustomerService.addCustomer(customer);
     }
@@ -33,7 +33,7 @@ public class CustomerController {
     //------------------------------------------------------------------------------------------------------------
 
     // login
-    @GetMapping(value = "/customer/login/{email}/{password}")
+    @GetMapping(value = "/login/{email}/{password}")
     public CustomerResponse login(@PathVariable("email") String email, @PathVariable("password") String password){
 
         return CustomerService.login(email, password);
@@ -42,7 +42,7 @@ public class CustomerController {
     //------------------------------------------------------------------------------------------------------------
 
     // get all customers
-    @GetMapping(value = "/customer/AllCustomers")
+    @GetMapping(value = "/AllCustomers")
     public ArrayList<Customer> getAllCustomers(){
         return CustomerService.getAllCustomers();
     }
