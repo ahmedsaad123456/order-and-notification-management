@@ -1,10 +1,10 @@
 package com.ordersManagment.Service.Service;
-import com.ordersManagment.Service.Model.Address;
 import com.ordersManagment.Service.Response.CustomerResponse;
 import org.springframework.stereotype.Service;
 import com.ordersManagment.Service.Model.Customer;
 import com.ordersManagment.Service.Database.CustomerDB;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 
@@ -21,7 +21,7 @@ public class CustomerService {
      * @param customer
      * @return CustomerResponse: return true and customer if added successfully, false if not added
      */
-    public static CustomerResponse addCustomer (Customer customer){
+    public CustomerResponse addCustomer (Customer customer){
 
         if(IsExistByEmail(customer.getEmail())){ // email already exist
 
@@ -65,13 +65,18 @@ public class CustomerService {
             return new CustomerResponse(false, "Customer not added","Invalid balance");
 
 
-        } else if(customer.getLanguage()!="English" && customer.getLanguage()!="Arabic"){// language must be English or Arabic
+        } else if(!Objects.equals(customer.getLanguage(), "English") && !Objects.equals(customer.getLanguage(), "Arabic")){// language must be English or Arabic
 
             System.out.println("Invalid language");
             return new CustomerResponse(false, "Customer not added","Invalid language");
 
 
-        } else { // all data is valid
+        }else if (IsExistByName(customer.getName())) { // name already exist
+
+            System.out.println("Name already exist");
+            return new CustomerResponse(false, "Customer not added", "Name already exist");
+
+        } else { // all data is valid: return true and customer
 
             Customer c = new Customer();
 
@@ -103,7 +108,7 @@ public class CustomerService {
      * @param password
      * @return CustomerResponse: return true and customer if login successfully, false if login failed
      */
-    public static CustomerResponse login(String email, String password){
+    public CustomerResponse login(String email, String password){
 
         if(IsExistByEmail(email)){ // email exists
 
@@ -136,7 +141,7 @@ public class CustomerService {
      * @param email
      * @return true if email exist, false if not exist
      */
-    public static Boolean IsExistByEmail(String email){
+    public Boolean IsExistByEmail(String email){
         return CustomerDB.getCustomerByEmail(email) != null;
     }
 
@@ -146,30 +151,17 @@ public class CustomerService {
      * get all customers
      * @return ArrayList<Customer>
      */
-    public static ArrayList<Customer> getAllCustomers(){
+    public ArrayList<Customer> getAllCustomers(){
         return CustomerDB.getCustomers();
     }
 
     //------------------------------------------------------------------------------------------------------------
 
     /**
-     * get address of customer by email
-     * @param email
-     * @return Customer
+     * check if name exist in database
+     * @param name
+     * @return
      */
-    public static Address getAddress(String email){
-
-        Customer customer = CustomerDB.getCustomerByEmail(email);
-        System.out.println(customer+" "+email);
-        assert customer != null;
-
-        Address a = new Address();
-        a.setALlAddress(customer.getAddress());
-        return a;
-
-    }
-
-    //------------------------------------------------------------------------------------------------------------
-
+    public Boolean IsExistByName(String name){return CustomerDB.getCustomerByName(name) != null;}
 
 }

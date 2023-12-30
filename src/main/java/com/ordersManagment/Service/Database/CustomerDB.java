@@ -1,9 +1,9 @@
 package com.ordersManagment.Service.Database;
 
+import com.ordersManagment.Service.Model.Address;
 import com.ordersManagment.Service.Model.Customer;
-import lombok.AllArgsConstructor;
+import lombok.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -103,5 +103,23 @@ public class CustomerDB extends Database{
         }
 
         customers.add(object);
+    }
+
+    //------------------------------------------------------------------------------------------------------------
+    /**
+     * get address of customer by email
+     * @param email
+     * @return Customer
+     */
+    public static Address getAddress(String email){
+
+        Customer customer = getCustomerByEmail(email);
+        System.out.println(customer+" "+email);
+        assert customer != null;
+
+        Address a = new Address();
+        a.setALlAddress(customer.getAddress());
+        return a;
+
     }
 }

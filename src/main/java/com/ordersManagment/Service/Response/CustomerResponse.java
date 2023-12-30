@@ -23,12 +23,6 @@ public class CustomerResponse extends Response {
 
     //------------------------------------------------------------------------------------------------------------
 
-    public CustomerResponse(boolean b, String s) {
-        super(b, s);
-    }
-
-    //------------------------------------------------------------------------------------------------------------
-
     public CustomerResponse(boolean b, String s, String errorMessage) {
         super(b, s, errorMessage);
     }

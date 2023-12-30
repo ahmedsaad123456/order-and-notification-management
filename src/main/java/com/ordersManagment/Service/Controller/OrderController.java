@@ -1,84 +1,72 @@
 package com.ordersManagment.Service.Controller;
-
 import com.ordersManagment.Service.Model.Order;
 import com.ordersManagment.Service.Model.Product;
-import com.ordersManagment.Service.Service.AccountService;
-import com.ordersManagment.Service.Service.OrderService;
-import com.ordersManagment.Service.Service.OrderStatusService;
-import org.apache.catalina.connector.Response;
+import com.ordersManagment.Service.Response.OrderResponse;
+import com.ordersManagment.Service.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import lombok.*;
 
 import java.util.ArrayList;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @RestController
 @RequestMapping("/order")
+
 public class OrderController {
     @Autowired
     OrderService orderService;
-    OrderStatusService orderStatusService;
     AccountService accountService;
 
     @PostMapping("/add-simple-order")
-    public Response addSimpleOrder(@RequestBody ArrayList<Product> orderList, int customerID) {
-        Response response = new Response();
+    public OrderResponse addSimpleOrder(@RequestBody ArrayList<Product> orderList, int customerID) {
+
         if (!orderService.checkSimpleOrderAvailability(orderList)) {
-//            response.setStatus(false);
-//            response.setMessage("Not added");
-            return response;
+
+            return new OrderResponse(false, "Order is Not added", "Not enough products");
         }
         if (!accountService.checkAccountBalance(customerID, orderService.calcutateOrder(orderList))) {
-//            response.setStatus(false);
-//            response.setMessage("Not added");
-            return response;
+
+            return new OrderResponse(false, "Order is Not added", "Not enough balance");
         }
-        orderService.addSimpleOrder(orderList, customerID);
+
+        Order order=orderService.addSimpleOrder(orderList, customerID);
         accountService.deductFromAccount(customerID, orderService.calcutateOrder(orderList));
-//        response.setStatus(true);
-//        response.setMessage("Added");
-        return response;
+        return new OrderResponse(true, "Order is added", order);
     }
 
     @PostMapping("/add-compound-order")
-    public Response addComplexOrder(@RequestBody ArrayList<Order> orderList, int customerID) {
-        Response response = new Response();
+    public OrderResponse addComplexOrder(@RequestBody ArrayList<Order> orderList, int customerID) {
         if (!orderService.checkCompoundOrderAvailability(orderList)) {
-//            response.setStatus(false);
-//            response.setMessage("Not added");
-            return response;
+            return new OrderResponse(false, null, "Order is Not added");
         }
-        for (int i = 0; i < orderList.size(); i++) {
-            if (!accountService.checkAccountBalance(orderList.get(i).getCustomer().getID(), orderService.calcutateOrder(orderList.get(i).getProducts()))) {
-//            response.setStatus(false);
-//            response.setMessage("Not added");
-                return response;
+        for (Order order : orderList) {
+            if (!accountService.checkAccountBalance(order.getCustomer().getID(), orderService.calcutateOrder(order.getProducts()))) {
+                return new OrderResponse(false, null, "Order is Not added");
             }
         }
 
-        orderService.addCompoundOrder(orderList, customerID);
-        for (int i = 0; i < orderList.size(); i++) {
-            accountService.deductFromAccount(orderList.get(i).getCustomer().getID(), orderService.calcutateOrder(orderList.get(i).getProducts()));
+        Order ord=orderService.addCompoundOrder(orderList, customerID);
+        for (Order order : orderList) {
+            accountService.deductFromAccount(order.getCustomer().getID(), orderService.calcutateOrder(order.getProducts()));
         }
-//        response.setStatus(true);
-//        response.setMessage("Added");
-        return response;
+
+        return new OrderResponse(true, "Order is added", ord);
     }
 
     @DeleteMapping("/delete-simple-order")
-    public Response deleteSimpleOrder(@RequestHeader int orderID) {
-        Response response = new Response();
+    public OrderResponse deleteSimpleOrder(@RequestHeader int orderID) {
+
         orderService.cancelSimpleOrder(orderID);
-//        response.setStatus(true);
-//        response.setMessage("Canceled");
-        return response;
+        return new OrderResponse(true, null,"Order is canceled");
     }
 
     @DeleteMapping("/delete-compound-order")
-    public Response deleteCompoundOrder(@RequestHeader int orderID) {
-        Response response = new Response();
+    public OrderResponse deleteCompoundOrder(@RequestHeader int orderID) {
+
         orderService.cancelCompoundOrder(orderID);
-//        response.setStatus(true);
-//        response.setMessage("Canceled");
-        return response;
+        return new OrderResponse(true, null,"Order is canceled");
     }
 }
