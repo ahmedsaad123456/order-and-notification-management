@@ -40,7 +40,7 @@ public class ShipmentService {
         if (accountService.deductFromAccount(customerID, shippingFees)) {
             ShipmentDB.setShipment(orderID, shipmentAddress);
             sendShipmentNotification(order);
-            order.setStatus(OrderStatus.Shipped);
+            order.setStatus(OrderStatus.Pending);
             return new ShipmentResponse(true, "Shipment successful", ShipmentDB.getShipmentByOrderID(orderID));
         }
         else {
@@ -81,9 +81,9 @@ public class ShipmentService {
         ShipmentDB.setShipment(orderID, shipmentAddress);
         for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
             sendShipmentNotification(simpleOrder);
-            simpleOrder.setStatus(OrderStatus.Shipped);
+            simpleOrder.setStatus(OrderStatus.Pending);
         }
-        compoundOrder.setStatus(OrderStatus.Shipped);
+        compoundOrder.setStatus(OrderStatus.Pending);
         return new ShipmentResponse(true, "Shipment successful", ShipmentDB.getShipmentByOrderID(orderID));
     }
 
