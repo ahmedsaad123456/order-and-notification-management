@@ -4,10 +4,7 @@ import com.ordersManagment.Service.Database.CustomerDB;
 import com.ordersManagment.Service.Database.OrderDB;
 import com.ordersManagment.Service.Database.ProductDB;
 import com.ordersManagment.Service.Enums.OrderStatus;
-import com.ordersManagment.Service.Model.CompoundOrder;
-import com.ordersManagment.Service.Model.Order;
-import com.ordersManagment.Service.Model.Product;
-import com.ordersManagment.Service.Model.SimpleOrder;
+import com.ordersManagment.Service.Model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -62,8 +59,22 @@ public class OrderService {
             }
         }
         assert CustomerDB.getCustomerByID(customerID) != null;
-        SimpleOrder order = new SimpleOrder(orderList, CustomerDB.getCustomerByID(customerID), OrderDB.getNextID(), OrderStatus.Placed , CustomerDB.getCustomerByID(customerID).getAddress());
+        SimpleOrder order = new SimpleOrder(orderList, CustomerDB.getCustomerByID(customerID), OrderDB.getNextID(), OrderStatus.Placed, CustomerDB.getCustomerByID(customerID).getAddress());
         OrderDB.addOrder(order);
+        Customer c = order.getCustomer();
+        NotificationSender s = null;
+        if (c.getPreferredChannel().equals("All")) {
+            s = new EmailNotificationSender();
+            s = new SMSNotificationSender(s);
+        } else if (c.getPreferredChannel().equals("Email")) {
+            s = new SMSNotificationSender();
+
+        } else if (c.getPreferredChannel().equals("SMS")) {
+            s = new EmailNotificationSender();
+        }
+
+        NotificationService notificationService = new NotificationService(new OrderTemplate(order), s);
+        notificationService.sendNotification();
         return order;
     }
 
@@ -93,6 +104,22 @@ public class OrderService {
             }
         }
         OrderDB.addOrder(order);
+        for (Order value : orderList) {
+            Customer c = value.getCustomer();
+            NotificationSender s = null;
+            if(c.getPreferredChannel().equals("All")){
+                s = new EmailNotificationSender();
+                s = new SMSNotificationSender(s);
+            } else if (c.getPreferredChannel().equals("Email")){
+                s = new SMSNotificationSender();
+
+            } else if(c.getPreferredChannel().equals("SMS")){
+                s = new EmailNotificationSender();
+            }
+
+            NotificationService notificationService = new NotificationService(new OrderTemplate(value) , s);
+            notificationService.sendNotification();
+        }
         return order;
     }
 
@@ -102,6 +129,17 @@ public class OrderService {
             orderSum += (float) (product.getAmount() * product.getPrice());
         }
         return orderSum;
+    }
+
+    public boolean checkAddress(ArrayList<Order> orderList){
+        String[] address = orderList.get(0).getCustomer().getAddress().split("/");
+        for(Order value: orderList){
+            String[] newAddress = value.getCustomer().getAddress().split("/");
+            if(!address[0].equals(newAddress[0]) || !address[1].equals(newAddress[1])){
+                return false;
+            }
+        }
+        return true;
     }
 
     public void cancelSimpleOrder(int orderID) {
@@ -132,5 +170,9 @@ public class OrderService {
             orderQueue.remove(0);
         }
         OrderDB.deleteOrder(orderID);
+    }
+
+    public ArrayList<Order> getOrders(){
+        return OrderDB.getOrders();
     }
 }
