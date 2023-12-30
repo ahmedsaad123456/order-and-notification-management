@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -33,6 +31,7 @@ public abstract class Template {
     protected String replacePlaceholders(String template) {
         Customer customer = CustomerDB.getCustomerByID(order.getCustomer().getID());
         // Replace {customerName} with actual customer name
+        assert customer != null;
         template = template.replace("{customerName}", customer.getName());
 
         // Replace {orderID} with actual order ID

@@ -1,7 +1,6 @@
 package com.ordersManagment.Service.Service;
 
 import com.ordersManagment.Service.Database.OrderTemplateDB;
-import com.ordersManagment.Service.Model.Customer;
 import com.ordersManagment.Service.Model.Order;
 
 

@@ -75,6 +75,7 @@ public class OrderService {
             s = new EmailNotificationSender();
         }
 
+        assert s != null;
         NotificationService notificationService = new NotificationService(new OrderTemplate(order), s);
         notificationService.sendNotification();
         return order;
@@ -122,6 +123,7 @@ public class OrderService {
                 s = new EmailNotificationSender();
             }
 
+            assert s != null;
             NotificationService notificationService = new NotificationService(new OrderTemplate(value) , s);
             notificationService.sendNotification();
         }
@@ -172,7 +174,7 @@ public class OrderService {
                 ProductDB.increaseProductAmount(orderProduct.getSerialNumber(), orderProduct.getAmount());
             }
             accountService.addToAccount(orderQueue.get(0).getCustomer().getID(), calcutateOrder(orderProducts));
-            orderQueue.removeFirst();
+            orderQueue.remove(0);
         }
         OrderDB.deleteOrder(orderID);
     }

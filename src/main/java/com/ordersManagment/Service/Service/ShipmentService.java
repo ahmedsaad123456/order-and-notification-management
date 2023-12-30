@@ -3,6 +3,7 @@ package com.ordersManagment.Service.Service;
 import com.ordersManagment.Service.Database.CustomerDB;
 import com.ordersManagment.Service.Database.OrderDB;
 import com.ordersManagment.Service.Database.ShipmentDB;
+import com.ordersManagment.Service.Enums.OrderStatus;
 import com.ordersManagment.Service.Model.*;
 import com.ordersManagment.Service.Response.ShipmentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ShipmentService {
      */
     public ShipmentResponse shipSimpleOrder(int orderID) {
         Order order = OrderDB.getInstance(orderID);
-        if (order == null || !(order instanceof SimpleOrder)) {
+        if (!(order instanceof SimpleOrder)) {
             return new ShipmentResponse(false, "Order not found", "Order with ID " + orderID + " not found");
         }
         Customer customer = OrderDB.getCustomer(order);
@@ -35,24 +36,11 @@ public class ShipmentService {
         Map<Integer, Address> shipmentAddress = new HashMap<>();
         shipmentAddress.put(customerID, CustomerDB.getAddress(customer.getEmail()));
 
-
-        //        Customer c = CustomerDB.getCustomerByID(customerID);
-//        NotificationSender s = null;
-//        if(c.getPreferredChannel().equals("All")){
-//            s = new EmailNotificationSender();
-//            s = new SMSNotificationSender(s);
-//        } else if (c.getPreferredChannel().equals("Email")){
-//            s = new SMSNotificationSender();
-//
-//        } else if(c.getPreferredChannel().equals("SMS")){
-//            s = new EmailNotificationSender();
-//        }
-//
-//        notificationService = new NotificationService(new ShipmentTemplate(c) , s);
-//        notificationService.sendNotification();
         double shippingFees = calculateShippingFees();
         if (accountService.deductFromAccount(customerID, shippingFees)) {
             ShipmentDB.setShipment(orderID, shipmentAddress);
+            sendShipmentNotification(order);
+            order.setStatus(OrderStatus.Pending);
             return new ShipmentResponse(true, "Shipment successful", ShipmentDB.getShipmentByOrderID(orderID));
         }
         else {
@@ -69,7 +57,7 @@ public class ShipmentService {
     public ShipmentResponse shipCompoundOrder(int orderID) {
         Order compoundOrder = OrderDB.getInstance(orderID);
         System.out.println(compoundOrder);
-        if (compoundOrder == null || !(compoundOrder instanceof CompoundOrder)) {
+        if (!(compoundOrder instanceof CompoundOrder)) {
             return new ShipmentResponse(false, "Invalid order", "Compound order with ID " + orderID + " not found");
         }
 
@@ -91,6 +79,11 @@ public class ShipmentService {
             }
         }
         ShipmentDB.setShipment(orderID, shipmentAddress);
+        for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
+            sendShipmentNotification(simpleOrder);
+            simpleOrder.setStatus(OrderStatus.Pending);
+        }
+        compoundOrder.setStatus(OrderStatus.Pending);
         return new ShipmentResponse(true, "Shipment successful", ShipmentDB.getShipmentByOrderID(orderID));
     }
 
@@ -101,6 +94,7 @@ public class ShipmentService {
      * @return ShipmentResponse indicating the success or failure of the cancellation
      */
     public ShipmentResponse cancelSimpleOrderShipment(int shipmentID) {
+
         Shipment shipment = ShipmentDB.getShipment(shipmentID);
         if (shipment == null) {
             return new ShipmentResponse(false, "Shipment not found", "Shipment with ID " + shipmentID + " not found");
@@ -110,6 +104,7 @@ public class ShipmentService {
             return new ShipmentResponse(false, "Shipment cancellation failed", "Shipment cannot be cancelled after 3 minutes");
         }
 
+        assert OrderDB.getInstance(shipment.getOrderID()) != null;
         int customerID = OrderDB.getCustomer(OrderDB.getInstance(shipment.getOrderID())).getID();
         double refundedFees = calculateShippingFees();
         accountService.addToAccount(customerID, refundedFees);
@@ -125,6 +120,7 @@ public class ShipmentService {
      * @return ShipmentResponse indicating the success or failure of the cancellation
      */
     public ShipmentResponse cancelCompoundOrderShipment(int shipmentID) {
+
         Shipment shipment = ShipmentDB.getShipment(shipmentID);
         if (shipment == null) {
             return new ShipmentResponse(false, "Shipment not found", "Shipment with ID " + shipmentID + " not found");
@@ -135,6 +131,7 @@ public class ShipmentService {
         }
 
         Order compoundOrder = OrderDB.getInstance(shipment.getOrderID());
+        assert compoundOrder != null;
         int numberOfOrders = ((CompoundOrder) compoundOrder).getOrders().size();
         double refundedFees = (calculateShippingFees() + numberOfOrders * 5) / numberOfOrders;
 
@@ -164,10 +161,36 @@ public class ShipmentService {
      * @return True if the shipment can be cancelled, false otherwise
      */
     private boolean checkShipmentTime(Time shipmentTime) {
+
         Time currentTime = new Time(new Date().getTime());
         long differenceInMillis = shipmentTime.getTime() - currentTime.getTime();
         long differenceInMinutes = differenceInMillis / (60 * 1000);
         return differenceInMinutes < 3;
+    }
+
+    /**
+     * Send notification to customer
+     *
+     * @param order The order to be shipped
+     */
+    private void sendShipmentNotification(Order order){
+
+        Customer customer = OrderDB.getCustomer(order);
+        NotificationSender s = null;
+        if(customer.getPreferredChannel().equals("All")){
+            s = new EmailNotificationSender();
+            s = new SMSNotificationSender(s);
+        }
+        else if (customer.getPreferredChannel().equals("Email")){
+            s = new SMSNotificationSender();
+
+        }
+        else if(customer.getPreferredChannel().equals("SMS")){
+            s = new EmailNotificationSender();
+        }
+        assert s != null;
+        NotificationService notificationService = new NotificationService(new ShipmentTemplate(order) , s);
+        notificationService.sendNotification();
     }
 
 }
