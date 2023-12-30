@@ -7,7 +7,9 @@ import com.ordersManagment.Service.Enums.OrderStatus;
 import com.ordersManagment.Service.Model.*;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Service
 public class OrderService {
@@ -59,7 +61,7 @@ public class OrderService {
             }
         }
         assert CustomerDB.getCustomerByID(customerID) != null;
-        SimpleOrder order = new SimpleOrder(orderList, CustomerDB.getCustomerByID(customerID), OrderDB.getNextID(), OrderStatus.Placed, CustomerDB.getCustomerByID(customerID).getAddress());
+        SimpleOrder order = new SimpleOrder(orderList, CustomerDB.getCustomerByID(customerID), OrderDB.getNextID(), OrderStatus.Placed, CustomerDB.getCustomerByID(customerID).getAddress(), new Time(new Date().getTime()));
         OrderDB.addOrder(order);
         Customer c = order.getCustomer();
         NotificationSender s = null;
@@ -90,6 +92,7 @@ public class OrderService {
                 }
             }
         }
+        Time time = new Time(new Date().getTime());
         CompoundOrder order = new CompoundOrder();
         for (Order value : orderList) {
             if (value.getCustomer().getID() == customerID) {
@@ -97,9 +100,11 @@ public class OrderService {
                 order.setOrderID(OrderDB.getNextID());
                 order.setStatus(OrderStatus.Placed);
                 order.setCustomer(value.getCustomer());
+                order.setOrderTime(time);
             } else {
                 value.setOrderID(OrderDB.getNextID());
                 value.setStatus(OrderStatus.Placed);
+                value.setOrderTime(time);
                 order.addOrder(value);
             }
         }
@@ -174,5 +179,12 @@ public class OrderService {
 
     public ArrayList<Order> getOrders(){
         return OrderDB.getOrders();
+    }
+
+    public boolean checkOrderTime(int orderID) {
+        Time currentTime = new Time(new Date().getTime()), orderTime = OrderDB.getInstance(orderID).getOrderTime();
+        long differenceInMillis = orderTime.getTime() - currentTime.getTime();
+        long differenceInMinutes = differenceInMillis / (60 * 1000);
+        return differenceInMinutes < 3;
     }
 }

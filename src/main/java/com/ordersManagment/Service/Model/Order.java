@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ordersManagment.Service.Enums.OrderStatus;
 import lombok.*;
 
+import java.sql.Time;
 import java.util.ArrayList;
 
 @Getter
@@ -30,6 +31,8 @@ public class Order {
     @JsonProperty("address")
     private String address;
 
+    @JsonProperty("orderTime")
+    Time orderTime;
     //-------------------------------------------------------------
 
 
