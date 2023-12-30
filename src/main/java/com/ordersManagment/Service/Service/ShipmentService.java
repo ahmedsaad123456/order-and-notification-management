@@ -2,17 +2,13 @@ package com.ordersManagment.Service.Service;
 
 import com.ordersManagment.Service.Database.OrderDB;
 import com.ordersManagment.Service.Database.ShipmentDB;
-import com.ordersManagment.Service.Model.CompundOrder;
-import com.ordersManagment.Service.Model.Order;
-import com.ordersManagment.Service.Model.Shipment;
-import com.ordersManagment.Service.Model.SimpleOrder;
+import com.ordersManagment.Service.Model.*;
 import com.ordersManagment.Service.Response.ShipmentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 @Service
 public class ShipmentService {
@@ -24,19 +20,6 @@ public class ShipmentService {
         this.accountService = accountService;
     }
 
-    /**
-     * Create and save a shipment for a simple order.
-     *
-     * @param orderID ID of the order to be shipped
-     */
-    private void setShipment(int orderID) {
-        Shipment shipment = new Shipment();
-        shipment.setOrderID(orderID);
-        Time time = new Time(new Date().getTime());
-        shipment.setShipmentTime(time);
-        shipment.setShipmentAddress(OrderDB.getInstance(orderID).getAddress());
-        ShipmentDB.saveShipment(shipment);
-    }
 
     /**
      * Ship a simple order and deduct shipping fees from the customer's account.
@@ -49,13 +32,16 @@ public class ShipmentService {
         if (order == null || !(order instanceof SimpleOrder)) {
             return new ShipmentResponse(false, "Order not found", "Order with ID " + orderID + " not found");
         }
-
-        setShipment(orderID);
         int customerID = OrderDB.getCustomer(order).getID();
+        Map<Integer, Address> shipmentAddress = new HashMap<>();
+        //shipmentAddress.put(customerID, );
+
         double shippingFees = calculateShippingFees();
         if (accountService.deductFromAccount(customerID, shippingFees)) {
+            ShipmentDB.setShipment(orderID, shipmentAddress);
             return new ShipmentResponse(true, "Shipment successful", ShipmentDB.getShipmentByOrderID(orderID));
-        } else {
+        }
+        else {
             return new ShipmentResponse(false, "Insufficient funds", "Customer does not have enough funds to cover shipping fees");
         }
     }
@@ -68,11 +54,21 @@ public class ShipmentService {
      */
     public ShipmentResponse shipCompoundOrder(int orderID) {
         Order compoundOrder = OrderDB.getInstance(orderID);
+        System.out.println(compoundOrder);
         if (compoundOrder == null || !(compoundOrder instanceof CompundOrder)) {
             return new ShipmentResponse(false, "Invalid order", "Compound order with ID " + orderID + " not found");
         }
 
-        setShipment(orderID);
+        Map<Integer, Address> shipmentAddress = new HashMap<>();
+        for (Order simpleOrder : ((CompundOrder) compoundOrder).getOrders()) {
+            int customerID = OrderDB.getCustomer(simpleOrder).getID();
+           // shipmentAddress.put(customerID, );
+        }
+
+//        if (!ShipmentDB.checkAddress(shipmentAddress)) {
+//            return new ShipmentResponse(false, "Invalid address", "Address of compound order must be the same for all simple orders");
+//        }
+
         int numberOfOrders = ((CompundOrder) compoundOrder).getOrders().size();
         double shippingFees = calculateShippingFees() / numberOfOrders;
 
@@ -82,7 +78,7 @@ public class ShipmentService {
                 return new ShipmentResponse(false, "Insufficient funds", "Customer does not have enough funds to cover shipping fees");
             }
         }
-
+        ShipmentDB.setShipment(orderID, shipmentAddress);
         return new ShipmentResponse(true, "Shipment successful", ShipmentDB.getShipmentByOrderID(orderID));
     }
 
@@ -157,11 +153,10 @@ public class ShipmentService {
      */
     private boolean checkShipmentTime(Time shipmentTime) {
         Time currentTime = new Time(new Date().getTime());
+
         long differenceInMillis = shipmentTime.getTime() - currentTime.getTime();
         long differenceInMinutes = differenceInMillis / (60 * 1000);
         return differenceInMinutes < 3;
     }
 
-//    private boolean checkAddress(String shipmentAddress) {
-//    }
 }
