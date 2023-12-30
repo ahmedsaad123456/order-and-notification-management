@@ -1,30 +1,24 @@
 package com.ordersManagment.Service.Database;
-
+import com.ordersManagment.Service.Model.CompundOrder;
 import com.ordersManagment.Service.Model.Customer;
 import com.ordersManagment.Service.Model.Order;
+import com.ordersManagment.Service.Model.Product;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 @Setter
 public class OrderDB extends Database{
     @Getter
-    private static Vector<Order> orders;
-
+    private static ArrayList<Order> orders;
+  
     @Getter
     private static int nextID;
-
+  
     static {
         orders = new Vector<>();
         nextID = 0;
-    }
-
-
-    @Override
-    public void createInstance(Object object) {
-        orders.add((Order) object);
     }
 
     public static Order getInstance(int orderID){
@@ -35,7 +29,7 @@ public class OrderDB extends Database{
         }
         return null;
     }
-
+  
     public static void addOrder(Order order){
         orders.add(order);
         nextID++;
@@ -45,8 +39,9 @@ public class OrderDB extends Database{
         orders.remove(getInstance(orderID));
     }
 
+
     public static Customer getCustomer(Order order){
         return order.getCustomer();
     }
-
 }
+

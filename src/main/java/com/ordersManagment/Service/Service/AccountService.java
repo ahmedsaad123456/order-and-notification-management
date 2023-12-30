@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountService {
     public boolean deductFromAccount(int custID, double balance) {
-        Customer customer = CustomerDB.getInstance(custID);
+        Customer customer = CustomerDB.getCustomerByID(custID);
         if (customer.getBalance() >= balance) {
             customer.setBalance(customer.getBalance() - balance);
             return true;
@@ -17,7 +17,7 @@ public class AccountService {
     }
 
     public boolean addToAccount(int custID, double balance) {
-        Customer customer = CustomerDB.getInstance(custID);
+        Customer customer = CustomerDB.getCustomerByID(custID);
         customer.setBalance(customer.getBalance() + balance);
         return true;
     }
@@ -27,5 +27,4 @@ public class AccountService {
         Customer customer = CustomerDB.getInstance(custID);
         return (customer.getBalance() >= balance);
     }
-
 }

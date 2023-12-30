@@ -1,39 +1,41 @@
 package com.ordersManagment.Service.Controller;
 
-import com.ordersManagment.Service.Model.Order;
+import com.ordersManagment.Service.Response.ShipmentResponse;
 import com.ordersManagment.Service.Service.ShipmentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
-@RequestMapping("/shipment")
+@AllArgsConstructor
+@RequestMapping("/Shipment")
 public class ShipmentController {
 
     private final ShipmentService shipmentService;
-
-    @Autowired
-    public ShipmentController(ShipmentService shipmentService) {
-        this.shipmentService = shipmentService;
+    // Place Simple Order Shipment
+    @PostMapping(value = "/place/simple/{orderID}")
+    public ShipmentResponse placeSimpleOrderShipment(@PathVariable("orderID") int orderID) {
+        return shipmentService.shipSimpleOrder(orderID);
     }
 
-    @PostMapping("/place/{orderID}")
-    public void placeSimpleOrderShipment(@PathVariable int orderID) {
-        shipmentService.shipSimpleOrder(orderID);
+    // Place Compound Order Shipment
+    @PostMapping(value = "/place/compound/{orderID}")
+    public ShipmentResponse placeCompoundOrderShipment(@PathVariable("orderID") int orderID) {
+        return shipmentService.shipCompoundOrder(orderID);
     }
 
-    @PostMapping("/place/{orderID}")
-    public void placeCompoundOrderShipment(@PathVariable int orderID) {
-        shipmentService.shipCompoundOrder(orderID);
+    // Cancel Simple Order Shipment
+    @DeleteMapping (value = "/cancel/simple/{shipmentID}")
+    public ShipmentResponse cancelSimpleOrderShipment(@PathVariable("shipmentID") int shipmentID) {
+        return shipmentService.cancelSimpleOrderShipment(shipmentID);
     }
 
-    @PostMapping("/cancel/{orderID}")
-    public void cancelSimpleOrderShipment(@PathVariable int orderID) {
-        shipmentService.cancelSimpleOrderShipment(orderID);
+    // Cancel Compound Order Shipment
+    @DeleteMapping(value ="/cancel/compound/{shipmentID}")
+    public ShipmentResponse cancelCompoundOrderShipment(@PathVariable("shipmentID") int shipmentID) {
+        return shipmentService.cancelCompoundOrderShipment(shipmentID);
     }
 
-    @PostMapping("/cancel/{orderID}")
-    public void cancelCompoundOrderShipment(@PathVariable int orderID) {
-        shipmentService.cancelCompoundOrderShipment(orderID);
-    }
 
 }

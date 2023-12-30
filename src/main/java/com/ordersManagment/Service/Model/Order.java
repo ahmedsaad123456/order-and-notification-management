@@ -1,10 +1,8 @@
 package com.ordersManagment.Service.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ordersManagment.Service.Enums.OrderStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 
@@ -14,11 +12,18 @@ import java.util.ArrayList;
 @NoArgsConstructor
 
 public class Order {
-
-    protected ArrayList<Product> products;
-    protected Customer customer;
-    protected int OrderID;
-    protected OrderStatus orderStatus;
-
+    @JsonProperty("products")
+    @NonNull
+    private ArrayList<Product> products;
+    @JsonProperty("customer")
+    private Customer customer;
+    @JsonProperty("orderID")
+    @NonNull
+    private int OrderID;
+    @JsonProperty("status")
+    private OrderStatus status;
+    @JsonProperty("address")
+    private String address;
 
 }
+

@@ -1,16 +1,57 @@
 package com.ordersManagment.Service.Controller;
 
-import com.ordersManagment.Service.Model.Order;
-import com.ordersManagment.Service.Model.Product;
-import com.ordersManagment.Service.Service.AccountService;
-import com.ordersManagment.Service.Service.OrderService;
-import com.ordersManagment.Service.Service.OrderStatusService;
-import org.apache.catalina.connector.Response;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ordersManagment.Service.Database.CustomerDB;
+import com.ordersManagment.Service.Model.Address;
+import com.ordersManagment.Service.Response.CustomerResponse;
+import com.ordersManagment.Service.Service.CustomerService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
+import com.ordersManagment.Service.Model.Customer;
 import java.util.ArrayList;
 
 @RestController
+@AllArgsConstructor
+@RequestMapping(value = "/api/Auth")
+
+/**
+ * CustomerController class
+ * used to sign up, login, get all customers and get address
+ * get help from CustomerService class
+ */
+
 public class CustomerController {
+
+    // sign up
+    @PostMapping(value = "/customer/signUp")
+    public CustomerResponse signUp(@RequestBody Customer customer){
+        return CustomerService.addCustomer(customer);
+    }
+
+    //------------------------------------------------------------------------------------------------------------
+
+    // login
+    @GetMapping(value = "/customer/login/{email}/{password}")
+    public CustomerResponse login(@PathVariable("email") String email, @PathVariable("password") String password){
+
+        return CustomerService.login(email, password);
+    }
+
+    //------------------------------------------------------------------------------------------------------------
+
+    // get all customers
+    @GetMapping(value = "/customer/AllCustomers")
+    public ArrayList<Customer> getAllCustomers(){
+        return CustomerService.getAllCustomers();
+    }
+
+    //------------------------------------------------------------------------------------------------------------
+
+    @GetMapping(value = "/customer/Address/{email}")
+    public Address getAddress(@PathVariable("email") String email){
+
+        System.out.println("email: " + email);
+        return CustomerService.getAddress(email);
+    }
+
 }

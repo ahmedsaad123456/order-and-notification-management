@@ -21,10 +21,4 @@ public abstract class Database {
         connection.disconnect();
     }
 
-    public abstract void createInstance(Object object);
-
-    public static Object getInstance(int ID) {
-        return null;
-    }
-
 }
