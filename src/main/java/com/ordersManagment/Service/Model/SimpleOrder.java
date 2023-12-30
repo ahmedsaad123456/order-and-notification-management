@@ -3,6 +3,7 @@ package com.ordersManagment.Service.Model;
 import com.ordersManagment.Service.Enums.OrderStatus;
 import lombok.*;
 
+import java.sql.Time;
 import java.util.ArrayList;
 
 @Getter
@@ -10,8 +11,7 @@ import java.util.ArrayList;
 
 
 public class SimpleOrder extends Order {
-    public SimpleOrder(ArrayList<Product> products, Customer customer, int orderID, OrderStatus orderStatus , String address) {
-
-        super(products , customer , orderID , orderStatus , address);
+    public SimpleOrder(ArrayList<Product> products, Customer customer, int orderID, OrderStatus orderStatus, String address, Time time) {
+        super(products, customer, orderID, orderStatus, address, time);
     }
 }

@@ -67,12 +67,18 @@ public class OrderController {
 
     @DeleteMapping("/delete-simple-order")
     public OrderResponse deleteSimpleOrder(@RequestHeader int orderID) {
+        if(!orderService.checkOrderTime(orderID)){
+            return new OrderResponse(false, "Order is not canceled", "Time is too late");
+        }
         orderService.cancelSimpleOrder(orderID);
         return new OrderResponse(true, null, "Order is canceled");
     }
 
     @DeleteMapping("/delete-compound-order")
     public OrderResponse deleteCompoundOrder(@RequestHeader int orderID) {
+        if(!orderService.checkOrderTime(orderID)){
+            return new OrderResponse(false, "Order is not canceled", "Time is too late");
+        }
         orderService.cancelCompoundOrder(orderID);
         return new OrderResponse(true, null, "Order is canceled");
     }

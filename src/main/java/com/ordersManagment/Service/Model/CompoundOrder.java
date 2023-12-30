@@ -30,11 +30,4 @@ public class CompoundOrder extends Order{
             }
         }
     }
-
-
-
-
-
-
-
 }
