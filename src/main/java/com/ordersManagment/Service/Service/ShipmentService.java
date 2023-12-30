@@ -1,5 +1,6 @@
 package com.ordersManagment.Service.Service;
 
+import com.ordersManagment.Service.Database.CustomerDB;
 import com.ordersManagment.Service.Database.OrderDB;
 import com.ordersManagment.Service.Database.ShipmentDB;
 import com.ordersManagment.Service.Model.*;
@@ -13,6 +14,8 @@ import java.util.*;
 public class ShipmentService {
 
     private final AccountService accountService;
+
+    private NotificationService notificationService;
     @Autowired
     public ShipmentService(AccountService accountService) {
         this.accountService = accountService;
@@ -32,6 +35,20 @@ public class ShipmentService {
         int customerID = OrderDB.getCustomer(order).getID();
         Map<Integer, Address> shipmentAddress = new HashMap<>();
         //shipmentAddress.put(customerID, );
+//        Customer c = CustomerDB.getCustomerByID(customerID);
+//        NotificationSender s = null;
+//        if(c.getPreferredChannel().equals("All")){
+//            s = new EmailNotificationSender();
+//            s = new SMSNotificationSender(s);
+//        } else if (c.getPreferredChannel().equals("Email")){
+//            s = new SMSNotificationSender();
+//
+//        } else if(c.getPreferredChannel().equals("SMS")){
+//            s = new EmailNotificationSender();
+//        }
+//
+//        notificationService = new NotificationService(new ShipmentTemplate(c) , s);
+//        notificationService.sendNotification();
 
         double shippingFees = calculateShippingFees();
         if (accountService.deductFromAccount(customerID, shippingFees)) {
@@ -41,6 +58,7 @@ public class ShipmentService {
         else {
             return new ShipmentResponse(false, "Insufficient funds", "Customer does not have enough funds to cover shipping fees");
         }
+
     }
 
     /**

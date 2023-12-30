@@ -62,7 +62,7 @@ public class OrderService {
                 }
             }
         }
-        SimpleOrder order = new SimpleOrder(orderList, CustomerDB.getCustomerByID(customerID), OrderDB.getNextID(), OrderStatus.PLACED);
+        SimpleOrder order = new SimpleOrder(orderList, CustomerDB.getCustomerByID(customerID), OrderDB.getNextID(), OrderStatus.Placed , CustomerDB.getCustomerByID(customerID).getAddress());
         OrderDB.addOrder(order);
     }
 
@@ -83,12 +83,12 @@ public class OrderService {
             if (orderList.get(i).getCustomer().getID() == customerID) {
                 order.setProducts(orderList.get(i).getProducts());
                 order.setOrderID(OrderDB.getNextID());
-                order.setOrderStatus(OrderStatus.PLACED);
+                order.setStatus(OrderStatus.Placed);
                 order.setCustomer(orderList.get(i).getCustomer());
             } else {
                 Order newOrder = orderList.get(i);
                 newOrder.setOrderID(OrderDB.getNextID());
-                newOrder.setOrderStatus(OrderStatus.PLACED);
+                newOrder.setStatus(OrderStatus.Placed);
                 order.addOrder(newOrder);
             }
         }
