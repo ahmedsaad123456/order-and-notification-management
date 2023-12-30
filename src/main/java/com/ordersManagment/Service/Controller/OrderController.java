@@ -32,6 +32,21 @@ public class OrderController {
             return new OrderResponse(false, "Order is Not added", "Not enough balance");
         }
 
+//        Customer c = CustomerDB.getCustomerByID(customerID);
+//        NotificationSender s = null;
+//        if(c.getPreferredChannel().equals("All")){
+//            s = new EmailNotificationSender();
+//            s = new SMSNotificationSender(s);
+//        } else if (c.getPreferredChannel().equals("Email")){
+//            s = new SMSNotificationSender();
+//
+//        } else if(c.getPreferredChannel().equals("SMS")){
+//            s = new EmailNotificationSender();
+//        }
+//
+//        notificationService = new NotificationService(new OrderTemplate(c) , s);
+//        notificationService.sendNotification();
+
         Order order=orderService.addSimpleOrder(orderList, customerID);
         accountService.deductFromAccount(customerID, orderService.calcutateOrder(orderList));
         return new OrderResponse(true, "Order is added", order);

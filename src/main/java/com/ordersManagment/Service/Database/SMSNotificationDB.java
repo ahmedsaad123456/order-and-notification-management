@@ -35,7 +35,7 @@ public class SMSNotificationDB extends Database {
 
             // Check if the notification is older than 120 seconds
             if (isNotificationExpired(frontNotification, currentTime)) {
-                Notification expiredNotification = SMSNotification.poll();
+                SMSNotification.poll();
             }
         }
     }

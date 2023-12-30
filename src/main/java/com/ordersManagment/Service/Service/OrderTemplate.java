@@ -2,13 +2,14 @@ package com.ordersManagment.Service.Service;
 
 import com.ordersManagment.Service.Database.OrderTemplateDB;
 import com.ordersManagment.Service.Model.Customer;
+import com.ordersManagment.Service.Model.Order;
 
 
 public class OrderTemplate extends Template{
 
 
-    public OrderTemplate(Customer c){
-        super(c);
+    public OrderTemplate(Order o){
+        super(o);
     }
 
     @Override

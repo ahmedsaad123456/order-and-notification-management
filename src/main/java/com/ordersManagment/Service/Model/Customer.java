@@ -5,6 +5,8 @@ import com.ordersManagment.Service.Enums.Language;
 import com.ordersManagment.Service.Enums.notificationChannel;
 import lombok.*;
 
+import java.util.ArrayList;
+
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -48,8 +50,7 @@ public class Customer {
     @NonNull
     private notificationChannel preferredChannel;
 
-    @JsonProperty("orderID")
-    private int orderID;
+
 
     public String getLanguage() {
         return language.toString();

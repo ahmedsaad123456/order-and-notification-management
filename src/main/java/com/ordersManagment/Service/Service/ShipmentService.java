@@ -35,6 +35,21 @@ public class ShipmentService {
         Map<Integer, Address> shipmentAddress = new HashMap<>();
         shipmentAddress.put(customerID, CustomerDB.getAddress(customer.getEmail()));
 
+
+        //        Customer c = CustomerDB.getCustomerByID(customerID);
+//        NotificationSender s = null;
+//        if(c.getPreferredChannel().equals("All")){
+//            s = new EmailNotificationSender();
+//            s = new SMSNotificationSender(s);
+//        } else if (c.getPreferredChannel().equals("Email")){
+//            s = new SMSNotificationSender();
+//
+//        } else if(c.getPreferredChannel().equals("SMS")){
+//            s = new EmailNotificationSender();
+//        }
+//
+//        notificationService = new NotificationService(new ShipmentTemplate(c) , s);
+//        notificationService.sendNotification();
         double shippingFees = calculateShippingFees();
         if (accountService.deductFromAccount(customerID, shippingFees)) {
             ShipmentDB.setShipment(orderID, shipmentAddress);
