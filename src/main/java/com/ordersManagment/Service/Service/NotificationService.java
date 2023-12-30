@@ -4,6 +4,7 @@ import com.ordersManagment.Service.Database.EmailNotificationDB;
 import com.ordersManagment.Service.Database.SMSNotificationDB;
 import com.ordersManagment.Service.Model.Notification;
 import lombok.*;
+import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -13,6 +14,8 @@ import java.util.Queue;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@NoArgsConstructor
+@Service
 
 public class NotificationService {
     @NonNull
@@ -24,10 +27,10 @@ public class NotificationService {
     @NonNull
     private NotificationSender notificationSender;
 
-//    public void sendNotification(){
-//        createNotification();
-//        notificationSender.sendNotification(notification);
-//    }
+    public void sendNotification(){
+        createNotification();
+        notificationSender.sendNotification(notification);
+    }
 
 
     private void createNotification(){

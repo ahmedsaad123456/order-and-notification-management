@@ -19,5 +19,6 @@ public class SMSNotificationSender implements NotificationSender{
         SMSNotificationDB.addNotification(notification);
         if(notificationSender!=null){
             notificationSender.sendNotification(notification);
-        }    }
+        }
+    }
 }

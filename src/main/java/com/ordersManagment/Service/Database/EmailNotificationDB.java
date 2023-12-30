@@ -35,7 +35,7 @@ public class EmailNotificationDB extends Database{
 
             // Check if the notification is older than 120 seconds
             if (isNotificationExpired(frontNotification, currentTime)) {
-                Notification expiredNotification = EmailNotification.poll();
+                EmailNotification.poll();
             }
         }
     }
