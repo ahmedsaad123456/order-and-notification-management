@@ -1,16 +1,16 @@
 package com.ordersManagment.Service.Database;
 import com.ordersManagment.Service.Model.Address;
 import com.ordersManagment.Service.Model.Shipment;
-import lombok.Getter;
+import lombok.*;
 
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+@Getter
 public class ShipmentDB extends Database{
-    @Getter
-    private static ArrayList<Shipment> shipments;
+    private static final ArrayList<Shipment> shipments;
 
     static {
         shipments = new ArrayList<>();

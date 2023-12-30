@@ -24,10 +24,10 @@ public class NotificationService {
     @NonNull
     private NotificationSender notificationSender;
 
-    public void sendNotification(){
-        createNotification();
-        notificationSender.sendNotification(notification);
-    };
+//    public void sendNotification(){
+//        createNotification();
+//        notificationSender.sendNotification(notification);
+//    }
 
 
     private void createNotification(){
@@ -40,13 +40,13 @@ public class NotificationService {
 
     }
 
-    public Queue<Notification> getSMSNotifications(){
+    public static Queue<Notification> getSMSNotifications(){
         return SMSNotificationDB.getAllNotifications();
-    };
+    }
 
     public Queue<Notification> getEmailNotifications(){
         return EmailNotificationDB.getAllNotifications();
-    };
+    }
 
 
 

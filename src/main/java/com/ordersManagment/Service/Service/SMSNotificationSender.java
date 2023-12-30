@@ -5,7 +5,7 @@ import com.ordersManagment.Service.Model.Notification;
 
 public class SMSNotificationSender implements NotificationSender{
 
-    private NotificationSender notificationSender;
+    private final NotificationSender notificationSender;
 
     public SMSNotificationSender(NotificationSender s){
         notificationSender = s;

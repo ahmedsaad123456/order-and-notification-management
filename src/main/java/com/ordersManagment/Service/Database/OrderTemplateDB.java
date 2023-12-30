@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class OrderTemplateDB extends Database{
 
-    private static ArrayList<String> orderTemplate;
+    private static final ArrayList<String> orderTemplate;
 
     static {
         orderTemplate = new ArrayList<>(Arrays.asList(

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class ShipmentTemplateDB extends Database{
-    private static ArrayList<String> shipmentTemplate;
+    private static final ArrayList<String> shipmentTemplate;
 
     static {
         shipmentTemplate = new ArrayList<>(Arrays.asList(

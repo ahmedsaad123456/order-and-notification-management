@@ -5,11 +5,16 @@ import com.ordersManagment.Service.Response.OrderResponse;
 import com.ordersManagment.Service.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import lombok.*;
 
 import java.util.ArrayList;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @RestController
 @RequestMapping("/order")
+
 public class OrderController {
     @Autowired
     OrderService orderService;

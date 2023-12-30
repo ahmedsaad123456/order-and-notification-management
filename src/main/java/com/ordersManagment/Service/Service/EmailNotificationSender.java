@@ -2,17 +2,18 @@ package com.ordersManagment.Service.Service;
 
 import com.ordersManagment.Service.Database.EmailNotificationDB;
 import com.ordersManagment.Service.Model.Notification;
+import lombok.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
 
 public class EmailNotificationSender implements NotificationSender{
 
-    private NotificationSender notificationSender;
+    private final NotificationSender notificationSender;
 
-    public EmailNotificationSender(NotificationSender s){
-        notificationSender = s;
-    }
-
-    public EmailNotificationSender(){
-        notificationSender = null;
+    EmailNotificationSender(){
+        this.notificationSender = null;
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
 public class EmailNotificationDB extends Database{
-    private static Queue<Notification> EmailNotification;
+    private static final Queue<Notification> EmailNotification;
 
     static {
         EmailNotification = new LinkedList<>();

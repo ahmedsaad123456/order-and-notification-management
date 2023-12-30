@@ -1,17 +1,15 @@
 package com.ordersManagment.Service.Controller;
-
-import com.ordersManagment.Service.Database.CustomerDB;
-import com.ordersManagment.Service.Model.Address;
 import com.ordersManagment.Service.Response.CustomerResponse;
 import com.ordersManagment.Service.Service.CustomerService;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.*;
 import org.springframework.web.bind.annotation.*;
 import com.ordersManagment.Service.Model.Customer;
 import java.util.ArrayList;
 
 @RestController
 @AllArgsConstructor
+@Getter
+@Setter
 @RequestMapping(value = "/api/Auth")
 
 /**
@@ -21,6 +19,10 @@ import java.util.ArrayList;
  */
 
 public class CustomerController {
+
+    private final CustomerService CustomerService;
+
+    //------------------------------------------------------------------------------------------------------------
 
     // sign up
     @PostMapping(value = "/customer/signUp")
