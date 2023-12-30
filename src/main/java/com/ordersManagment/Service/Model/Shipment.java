@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.sql.Time;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -23,7 +25,7 @@ public class Shipment {
     Time shipmentTime;
     @JsonProperty("shipmentAddress")
     @NonNull
-    String shipmentAddress;
+    Map<Integer, Address> shipmentAddress;
 
     public Shipment() {
         this.shipmentID = getStaticShipmentID();

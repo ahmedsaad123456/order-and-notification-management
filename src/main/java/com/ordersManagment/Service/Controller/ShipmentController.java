@@ -1,6 +1,5 @@
 package com.ordersManagment.Service.Controller;
 
-import com.ordersManagment.Service.Model.Shipment;
 import com.ordersManagment.Service.Response.ShipmentResponse;
 import com.ordersManagment.Service.Service.ShipmentService;
 import lombok.AllArgsConstructor;
@@ -17,13 +16,13 @@ public class ShipmentController {
 
     // Place Simple Order Shipment
     @PostMapping(value = "/place/simple/{orderID}")
-    public ShipmentResponse placeSimpleOrderShipment(@PathVariable("orderId") int orderID) {
+    public ShipmentResponse placeSimpleOrderShipment(@PathVariable("orderID") int orderID) {
         return shipmentService.shipSimpleOrder(orderID);
     }
 
     // Place Compound Order Shipment
     @PostMapping(value = "/place/compound/{orderID}")
-    public ShipmentResponse placeCompoundOrderShipment(@PathVariable("orderId") int orderID) {
+    public ShipmentResponse placeCompoundOrderShipment(@PathVariable("orderID") int orderID) {
         return shipmentService.shipCompoundOrder(orderID);
     }
 
@@ -38,5 +37,6 @@ public class ShipmentController {
     public ShipmentResponse cancelCompoundOrderShipment(@PathVariable("shipmentID") int shipmentID) {
         return shipmentService.cancelCompoundOrderShipment(shipmentID);
     }
+
 
 }
