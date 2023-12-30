@@ -79,7 +79,6 @@ public class ProductService {
      */
     public ProductResponse getProductBySerialNumber(String serialNumber){
         Product p = ProductDB.getProductBySerialNumber(serialNumber);
-        ArrayList<Product> products = ProductDB.getProducts();
         if(p!= null){
             return new ProductResponse(true , "product is exist" , p);
         }

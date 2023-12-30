@@ -73,6 +73,7 @@ public class OrderService {
             s = new EmailNotificationSender();
         }
 
+        assert s != null;
         NotificationService notificationService = new NotificationService(new OrderTemplate(order), s);
         notificationService.sendNotification();
         return order;
@@ -117,6 +118,7 @@ public class OrderService {
                 s = new EmailNotificationSender();
             }
 
+            assert s != null;
             NotificationService notificationService = new NotificationService(new OrderTemplate(value) , s);
             notificationService.sendNotification();
         }

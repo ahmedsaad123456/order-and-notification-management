@@ -19,7 +19,7 @@ public class CustomerService {
     /**
      * add customer / sign up
      * @param customer
-     * @return CustomerResponse: return true and customer if added successfully, false if not added
+     * @return CustomerResponse: return true and customer if added successfully, false if not added and error message
      */
     public CustomerResponse addCustomer (Customer customer){
 
