@@ -11,6 +11,8 @@ import java.util.HashMap;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping(value = "/product")
+
 
 /**
  * ProductController class
@@ -32,7 +34,7 @@ public class ProductController {
     //------------------------------------------------------------------------------------------------------------
 
     // add product
-    @PostMapping(value = "/product/add")
+    @PostMapping(value = "/add")
     public ProductResponse addProduct(@RequestBody Product p){
         return pService.addProduct(p);
 
@@ -41,7 +43,7 @@ public class ProductController {
     //------------------------------------------------------------------------------------------------------------
 
     // get all products
-    @GetMapping (value = "/product/AllProducts")
+    @GetMapping (value = "/AllProducts")
     public ArrayList<Product> getAllProducts(){
         return pService.getAllProduct();
     }
@@ -49,7 +51,7 @@ public class ProductController {
     //------------------------------------------------------------------------------------------------------------
 
     // get product by serial number
-    @GetMapping(value = "/product/show/{serialNumber}")
+    @GetMapping(value = "/show/{serialNumber}")
     public ProductResponse getProductBySerialNumber(@PathVariable("serialNumber") String serialNumber){
         return pService.getProductBySerialNumber(serialNumber);
     }
@@ -57,7 +59,7 @@ public class ProductController {
     //------------------------------------------------------------------------------------------------------------
 
     // get category
-    @GetMapping(value = "/product/category")
+    @GetMapping(value = "/category")
     public HashMap<String ,Integer> getAllCategories(){
         return pService.getAllCategories();
     }
