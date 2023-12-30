@@ -5,7 +5,6 @@ import com.ordersManagment.Service.Enums.Language;
 import com.ordersManagment.Service.Enums.notificationChannel;
 import lombok.*;
 
-import java.util.ArrayList;
 
 @Getter
 @Setter

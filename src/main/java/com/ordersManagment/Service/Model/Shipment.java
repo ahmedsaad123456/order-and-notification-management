@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.sql.Time;
-import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -13,16 +12,19 @@ import java.util.Map;
 
 @AllArgsConstructor
 public class Shipment {
+
     @JsonProperty("shipmentID")
     private int shipmentID;
 
     private static int shipmentIDCounter = 1;
+
     @JsonProperty("orderID")
-    @NonNull
     int orderID;
+
     @JsonProperty("shipmentTime")
     @NonNull
     Time shipmentTime;
+
     @JsonProperty("shipmentAddress")
     @NonNull
     Map<Integer, Address> shipmentAddress;
