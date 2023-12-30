@@ -1,10 +1,10 @@
 package com.ordersManagment.Service.Controller;
 
+import com.ordersManagment.Service.Database.CustomerDB;
+import com.ordersManagment.Service.Model.Customer;
 import com.ordersManagment.Service.Model.Order;
 import com.ordersManagment.Service.Model.Product;
-import com.ordersManagment.Service.Service.AccountService;
-import com.ordersManagment.Service.Service.OrderService;
-import com.ordersManagment.Service.Service.OrderStatusService;
+import com.ordersManagment.Service.Service.*;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +18,8 @@ public class OrderController {
     OrderService orderService;
     OrderStatusService orderStatusService;
     AccountService accountService;
+
+    NotificationService notificationService;
 
     @PostMapping("/add-simple-order")
     public Response addSimpleOrder(@RequestBody ArrayList<Product> orderList, int customerID) {
@@ -34,6 +36,24 @@ public class OrderController {
         }
         orderService.addSimpleOrder(orderList, customerID);
         accountService.deductFromAccount(customerID, orderService.calcutateOrder(orderList));
+
+
+//        Customer c = CustomerDB.getCustomerByID(customerID);
+//        NotificationSender s = null;
+//        if(c.getPreferredChannel().equals("All")){
+//            s = new EmailNotificationSender();
+//            s = new SMSNotificationSender(s);
+//        } else if (c.getPreferredChannel().equals("Email")){
+//            s = new SMSNotificationSender();
+//
+//        } else if(c.getPreferredChannel().equals("SMS")){
+//            s = new EmailNotificationSender();
+//        }
+//
+//        notificationService = new NotificationService(new OrderTemplate(c) , s);
+//        notificationService.sendNotification();
+
+
 //        response.setStatus(true);
 //        response.setMessage("Added");
         return response;
