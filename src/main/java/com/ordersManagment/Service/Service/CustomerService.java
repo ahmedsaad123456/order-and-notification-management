@@ -152,24 +152,5 @@ public class CustomerService {
 
     //------------------------------------------------------------------------------------------------------------
 
-    /**
-     * get address of customer by email
-     * @param email
-     * @return Customer
-     */
-    public static Address getAddress(String email){
-
-        Customer customer = CustomerDB.getCustomerByEmail(email);
-        System.out.println(customer+" "+email);
-        assert customer != null;
-
-        Address a = new Address();
-        a.setALlAddress(customer.getAddress());
-        return a;
-
-    }
-
-    //------------------------------------------------------------------------------------------------------------
-
 
 }

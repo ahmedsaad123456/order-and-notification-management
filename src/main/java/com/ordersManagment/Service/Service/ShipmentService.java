@@ -14,8 +14,6 @@ import java.util.*;
 public class ShipmentService {
 
     private final AccountService accountService;
-
-    private NotificationService notificationService;
     @Autowired
     public ShipmentService(AccountService accountService) {
         this.accountService = accountService;
@@ -32,23 +30,10 @@ public class ShipmentService {
         if (order == null || !(order instanceof SimpleOrder)) {
             return new ShipmentResponse(false, "Order not found", "Order with ID " + orderID + " not found");
         }
-        int customerID = OrderDB.getCustomer(order).getID();
+        Customer customer = OrderDB.getCustomer(order);
+        int customerID = customer.getID();
         Map<Integer, Address> shipmentAddress = new HashMap<>();
-        //shipmentAddress.put(customerID, );
-//        Customer c = CustomerDB.getCustomerByID(customerID);
-//        NotificationSender s = null;
-//        if(c.getPreferredChannel().equals("All")){
-//            s = new EmailNotificationSender();
-//            s = new SMSNotificationSender(s);
-//        } else if (c.getPreferredChannel().equals("Email")){
-//            s = new SMSNotificationSender();
-//
-//        } else if(c.getPreferredChannel().equals("SMS")){
-//            s = new EmailNotificationSender();
-//        }
-//
-//        notificationService = new NotificationService(new ShipmentTemplate(c) , s);
-//        notificationService.sendNotification();
+        shipmentAddress.put(customerID, CustomerDB.getAddress(customer.getEmail()));
 
         double shippingFees = calculateShippingFees();
         if (accountService.deductFromAccount(customerID, shippingFees)) {
@@ -58,7 +43,6 @@ public class ShipmentService {
         else {
             return new ShipmentResponse(false, "Insufficient funds", "Customer does not have enough funds to cover shipping fees");
         }
-
     }
 
     /**
@@ -76,16 +60,14 @@ public class ShipmentService {
 
         Map<Integer, Address> shipmentAddress = new HashMap<>();
         for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
-            int customerID = OrderDB.getCustomer(simpleOrder).getID();
-           // shipmentAddress.put(customerID, );
+            Customer customer = OrderDB.getCustomer(simpleOrder);
+            int customerID = customer.getID();
+            shipmentAddress.put(customerID, CustomerDB.getAddress(customer.getEmail()));
         }
 
-//        if (!ShipmentDB.checkAddress(shipmentAddress)) {
-//            return new ShipmentResponse(false, "Invalid address", "Address of compound order must be the same for all simple orders");
-//        }
 
         int numberOfOrders = ((CompoundOrder) compoundOrder).getOrders().size();
-        double shippingFees = calculateShippingFees() / numberOfOrders;
+        double shippingFees = (calculateShippingFees() + numberOfOrders * 5) / numberOfOrders;
 
         for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
             int customerID = OrderDB.getCustomer(simpleOrder).getID();
@@ -139,7 +121,7 @@ public class ShipmentService {
 
         Order compoundOrder = OrderDB.getInstance(shipment.getOrderID());
         int numberOfOrders = ((CompoundOrder) compoundOrder).getOrders().size();
-        double refundedFees = calculateShippingFees() / numberOfOrders;
+        double refundedFees = (calculateShippingFees() + numberOfOrders * 5) / numberOfOrders;
 
         for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
             int customerID = OrderDB.getCustomer(simpleOrder).getID();
@@ -168,7 +150,6 @@ public class ShipmentService {
      */
     private boolean checkShipmentTime(Time shipmentTime) {
         Time currentTime = new Time(new Date().getTime());
-
         long differenceInMillis = shipmentTime.getTime() - currentTime.getTime();
         long differenceInMinutes = differenceInMillis / (60 * 1000);
         return differenceInMinutes < 3;
