@@ -13,17 +13,24 @@ import java.util.ArrayList;
 
 
 public class Order {
+
     @JsonProperty("products")
     @NonNull
     private ArrayList<Product> products;
+
     @JsonProperty("customer")
     private Customer customer;
+
     @JsonProperty("orderID")
-    @NonNull
     private int OrderID;
+
     @JsonProperty("status")
     private OrderStatus status;
+
     @JsonProperty("address")
     private String address;
+
+    //-------------------------------------------------------------
+
 
 }

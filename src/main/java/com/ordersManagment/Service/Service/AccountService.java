@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 public class AccountService {
     public boolean deductFromAccount(int custID, double balance) {
         Customer customer = CustomerDB.getCustomerByID(custID);
+        assert customer != null;
         if (customer.getBalance() >= balance) {
             customer.setBalance(customer.getBalance() - balance);
             return true;
@@ -16,15 +17,16 @@ public class AccountService {
         return false;
     }
 
-    public boolean addToAccount(int custID, double balance) {
+    public void addToAccount(int custID, double balance) {
         Customer customer = CustomerDB.getCustomerByID(custID);
+        assert customer != null;
         customer.setBalance(customer.getBalance() + balance);
-        return true;
     }
 
 
     public boolean checkAccountBalance(int custID, double balance) {
         Customer customer = CustomerDB.getCustomerByID(custID);
+        assert customer != null;
         return (customer.getBalance() >= balance);
     }
 }

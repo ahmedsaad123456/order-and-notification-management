@@ -1,10 +1,10 @@
 package com.ordersManagment.Service.Service;
-import com.ordersManagment.Service.Model.Address;
 import com.ordersManagment.Service.Response.CustomerResponse;
 import org.springframework.stereotype.Service;
 import com.ordersManagment.Service.Model.Customer;
 import com.ordersManagment.Service.Database.CustomerDB;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 
@@ -65,13 +65,18 @@ public class CustomerService {
             return new CustomerResponse(false, "Customer not added","Invalid balance");
 
 
-        } else if(customer.getLanguage()!="English" && customer.getLanguage()!="Arabic"){// language must be English or Arabic
+        } else if(!Objects.equals(customer.getLanguage(), "English") && !Objects.equals(customer.getLanguage(), "Arabic")){// language must be English or Arabic
 
             System.out.println("Invalid language");
             return new CustomerResponse(false, "Customer not added","Invalid language");
 
 
-        } else { // all data is valid
+        }else if (IsExistByName(customer.getName())) { // name already exist
+
+            System.out.println("Name already exist");
+            return new CustomerResponse(false, "Customer not added", "Name already exist");
+
+        } else { // all data is valid: return true and customer
 
             Customer c = new Customer();
 
@@ -152,5 +157,11 @@ public class CustomerService {
 
     //------------------------------------------------------------------------------------------------------------
 
+    /**
+     * check if name exist in database
+     * @param name
+     * @return
+     */
+    public static Boolean IsExistByName(String name){return CustomerDB.getCustomerByName(name) != null;}
 
 }
