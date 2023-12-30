@@ -2,11 +2,12 @@ package com.ordersManagment.Service.Service;
 
 import com.ordersManagment.Service.Database.EmailNotificationDB;
 import com.ordersManagment.Service.Database.SMSNotificationDB;
+import com.ordersManagment.Service.Model.Customer;
 import com.ordersManagment.Service.Model.Notification;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Time;
 import java.time.Instant;
 import java.util.Queue;
@@ -24,10 +25,27 @@ public class NotificationService {
     private Notification notification;
 
 
-    @NonNull
+
     private NotificationSender notificationSender;
 
-    public void sendNotification(){
+    public void chooseChannelAndSend(Customer c ){
+        NotificationSender s = null;
+        if (c.getPreferredChannel().equals("All")) {
+            s = new EmailNotificationSender();
+            s = new SMSNotificationSender(s);
+        } else if (c.getPreferredChannel().equals("SMS")) {
+            s = new SMSNotificationSender();
+
+        } else if (c.getPreferredChannel().equals("Email")) {
+            s = new EmailNotificationSender();
+        }
+
+        assert s != null;
+        notificationSender = s;
+        sendNotification();
+
+    }
+    private void sendNotification(){
         createNotification();
         notificationSender.sendNotification(notification);
     }
@@ -35,7 +53,7 @@ public class NotificationService {
 
     private void createNotification(){
         Instant currentInstant = Instant.now();
-        Date currentDate = (Date) Date.from(currentInstant);
+        Date currentDate =  Date.from(currentInstant);
         Time currentTime = new Time(System.currentTimeMillis());
         String message = template.getMessage();
 

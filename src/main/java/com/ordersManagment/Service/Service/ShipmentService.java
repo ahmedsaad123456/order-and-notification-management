@@ -2,6 +2,7 @@ package com.ordersManagment.Service.Service;
 
 import com.ordersManagment.Service.Database.CustomerDB;
 import com.ordersManagment.Service.Database.OrderDB;
+import com.ordersManagment.Service.Database.ProductDB;
 import com.ordersManagment.Service.Database.ShipmentDB;
 import com.ordersManagment.Service.Enums.OrderStatus;
 import com.ordersManagment.Service.Model.*;
@@ -175,22 +176,11 @@ public class ShipmentService {
      */
     private void sendShipmentNotification(Order order){
 
-        Customer customer = OrderDB.getCustomer(order);
-        NotificationSender s = null;
-        if(customer.getPreferredChannel().equals("All")){
-            s = new EmailNotificationSender();
-            s = new SMSNotificationSender(s);
-        }
-        else if (customer.getPreferredChannel().equals("Email")){
-            s = new SMSNotificationSender();
 
-        }
-        else if(customer.getPreferredChannel().equals("SMS")){
-            s = new EmailNotificationSender();
-        }
-        assert s != null;
-        NotificationService notificationService = new NotificationService(new ShipmentTemplate(order) , s);
-        notificationService.sendNotification();
+        Customer customer = OrderDB.getCustomer(order);
+        NotificationService notificationService = new NotificationService(new ShipmentTemplate(order));
+        notificationService.chooseChannelAndSend(customer);
+
     }
 
 }

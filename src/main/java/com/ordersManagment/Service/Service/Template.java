@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public abstract class Template {
 
 
-    private Order order;
+    protected Order order;
 
 
 

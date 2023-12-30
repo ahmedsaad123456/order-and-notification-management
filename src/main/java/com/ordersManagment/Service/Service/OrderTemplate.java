@@ -13,7 +13,7 @@ public class OrderTemplate extends Template{
 
     @Override
     public String getMessage() {
-        String temp = OrderTemplateDB.getTemplate();
+        String temp = OrderTemplateDB.getTemplate(order.getCustomer());
 
         return replacePlaceholders(temp);
     }
