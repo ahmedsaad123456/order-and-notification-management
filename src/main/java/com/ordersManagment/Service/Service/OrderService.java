@@ -128,8 +128,9 @@ public class OrderService {
                 ProductDB.increaseProductAmount(orderProducts.get(i).getSerialNumber(), orderProducts.get(i).getAmount());
             }
             accountService.addToAccount(orderQueue.get(0).getCustomer().getID(), calcutateOrder(orderProducts));
-            orderQueue.removeFirst();
+            orderQueue.remove(0);
         }
         OrderDB.deleteOrder(orderID);
     }
+
 }

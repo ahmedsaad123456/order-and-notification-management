@@ -47,11 +47,6 @@ public class CustomerController {
 
     //------------------------------------------------------------------------------------------------------------
 
-    @GetMapping(value = "/customer/Address/{email}")
-    public Address getAddress(@PathVariable("email") String email){
 
-        System.out.println("email: " + email);
-        return CustomerService.getAddress(email);
-    }
 
 }

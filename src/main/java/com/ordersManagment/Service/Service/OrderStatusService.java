@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderStatusService {
     public boolean changeStatus(int orderID, OrderStatus orderStatus){
-        OrderDB.getInstance(orderID).setOrderStatus(orderStatus);
+        OrderDB.getInstance(orderID).setStatus(orderStatus);
         return true;
     }
 }

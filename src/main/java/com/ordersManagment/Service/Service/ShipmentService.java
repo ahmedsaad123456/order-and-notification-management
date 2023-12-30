@@ -1,5 +1,6 @@
 package com.ordersManagment.Service.Service;
 
+import com.ordersManagment.Service.Database.CustomerDB;
 import com.ordersManagment.Service.Database.OrderDB;
 import com.ordersManagment.Service.Database.ShipmentDB;
 import com.ordersManagment.Service.Model.*;
@@ -32,7 +33,7 @@ public class ShipmentService {
         Customer customer = OrderDB.getCustomer(order);
         int customerID = customer.getID();
         Map<Integer, Address> shipmentAddress = new HashMap<>();
-        shipmentAddress.put(customerID, CustomerService.getAddress(customer.getEmail()));
+        shipmentAddress.put(customerID, CustomerDB.getAddress(customer.getEmail()));
 
         double shippingFees = calculateShippingFees();
         if (accountService.deductFromAccount(customerID, shippingFees)) {
@@ -61,12 +62,9 @@ public class ShipmentService {
         for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
             Customer customer = OrderDB.getCustomer(simpleOrder);
             int customerID = customer.getID();
-            shipmentAddress.put(customerID, CustomerService.getAddress(customer.getEmail()));
+            shipmentAddress.put(customerID, CustomerDB.getAddress(customer.getEmail()));
         }
 
-//        if (!ShipmentDB.checkAddress(shipmentAddress)) {
-//            return new ShipmentResponse(false, "Invalid address", "Address of compound order must be the same for all simple orders");
-//        }
 
         int numberOfOrders = ((CompoundOrder) compoundOrder).getOrders().size();
         double shippingFees = (calculateShippingFees() + numberOfOrders * 5) / numberOfOrders;
