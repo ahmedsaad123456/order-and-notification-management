@@ -64,20 +64,10 @@ public class OrderService {
         SimpleOrder order = new SimpleOrder(orderList, CustomerDB.getCustomerByID(customerID), OrderDB.getNextID(), OrderStatus.Placed, CustomerDB.getCustomerByID(customerID).getAddress(), new Time(new Date().getTime()));
         OrderDB.addOrder(order);
         Customer c = order.getCustomer();
-        NotificationSender s = null;
-        if (c.getPreferredChannel().equals("All")) {
-            s = new EmailNotificationSender();
-            s = new SMSNotificationSender(s);
-        } else if (c.getPreferredChannel().equals("Email")) {
-            s = new SMSNotificationSender();
+        NotificationService notificationService = new NotificationService(new OrderTemplate(order));
+        notificationService.chooseChannelAndSend(c);
 
-        } else if (c.getPreferredChannel().equals("SMS")) {
-            s = new EmailNotificationSender();
-        }
 
-        assert s != null;
-        NotificationService notificationService = new NotificationService(new OrderTemplate(order), s);
-        notificationService.sendNotification();
         return order;
     }
 
@@ -112,20 +102,8 @@ public class OrderService {
         OrderDB.addOrder(order);
         for (Order value : orderList) {
             Customer c = value.getCustomer();
-            NotificationSender s = null;
-            if(c.getPreferredChannel().equals("All")){
-                s = new EmailNotificationSender();
-                s = new SMSNotificationSender(s);
-            } else if (c.getPreferredChannel().equals("Email")){
-                s = new SMSNotificationSender();
-
-            } else if(c.getPreferredChannel().equals("SMS")){
-                s = new EmailNotificationSender();
-            }
-
-            assert s != null;
-            NotificationService notificationService = new NotificationService(new OrderTemplate(value) , s);
-            notificationService.sendNotification();
+            NotificationService notificationService = new NotificationService(new OrderTemplate(value));
+            notificationService.chooseChannelAndSend(c);
         }
         return order;
     }
