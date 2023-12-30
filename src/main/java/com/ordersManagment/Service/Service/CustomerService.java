@@ -21,7 +21,7 @@ public class CustomerService {
      * @param customer
      * @return CustomerResponse: return true and customer if added successfully, false if not added
      */
-    public static CustomerResponse addCustomer (Customer customer){
+    public CustomerResponse addCustomer (Customer customer){
 
         if(IsExistByEmail(customer.getEmail())){ // email already exist
 
@@ -108,7 +108,7 @@ public class CustomerService {
      * @param password
      * @return CustomerResponse: return true and customer if login successfully, false if login failed
      */
-    public static CustomerResponse login(String email, String password){
+    public CustomerResponse login(String email, String password){
 
         if(IsExistByEmail(email)){ // email exists
 
@@ -141,7 +141,7 @@ public class CustomerService {
      * @param email
      * @return true if email exist, false if not exist
      */
-    public static Boolean IsExistByEmail(String email){
+    public Boolean IsExistByEmail(String email){
         return CustomerDB.getCustomerByEmail(email) != null;
     }
 
@@ -151,7 +151,7 @@ public class CustomerService {
      * get all customers
      * @return ArrayList<Customer>
      */
-    public static ArrayList<Customer> getAllCustomers(){
+    public ArrayList<Customer> getAllCustomers(){
         return CustomerDB.getCustomers();
     }
 
@@ -162,6 +162,6 @@ public class CustomerService {
      * @param name
      * @return
      */
-    public static Boolean IsExistByName(String name){return CustomerDB.getCustomerByName(name) != null;}
+    public Boolean IsExistByName(String name){return CustomerDB.getCustomerByName(name) != null;}
 
 }

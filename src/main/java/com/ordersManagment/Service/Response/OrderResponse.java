@@ -20,9 +20,7 @@ public class OrderResponse extends Response{
         super(b, s, errorMessage);
     }
 
-    public OrderResponse(boolean b, String s) {
-        super(b, s);
-    }
+
 
 
 

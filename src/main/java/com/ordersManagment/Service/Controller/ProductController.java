@@ -27,9 +27,7 @@ import java.util.HashMap;
  */
 public class ProductController {
 
-
     private final ProductService pService;
-
 
     //------------------------------------------------------------------------------------------------------------
 

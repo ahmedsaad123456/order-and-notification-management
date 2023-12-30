@@ -9,8 +9,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
-public class SMSNotificationDB {
-    private static Queue<Notification> SMSNotification;
+public class SMSNotificationDB extends Database {
+    private static final Queue<Notification> SMSNotification;
 
     static {
         SMSNotification = new LinkedList<>();

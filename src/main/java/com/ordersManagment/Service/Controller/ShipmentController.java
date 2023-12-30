@@ -2,7 +2,7 @@ package com.ordersManagment.Service.Controller;
 
 import com.ordersManagment.Service.Response.ShipmentResponse;
 import com.ordersManagment.Service.Service.ShipmentService;
-import lombok.AllArgsConstructor;
+import lombok.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -10,6 +10,9 @@ import java.util.ArrayList;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/Shipment")
+@Getter
+@Setter
+
 public class ShipmentController {
 
     private final ShipmentService shipmentService;

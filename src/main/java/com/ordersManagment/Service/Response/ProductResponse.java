@@ -26,12 +26,6 @@ public class ProductResponse extends Response {
 
     //------------------------------------------------------------------------------------------------------------
 
-    public ProductResponse(boolean b, String s) {
-        super(b, s);
-    }
-
-    //------------------------------------------------------------------------------------------------------------
-
 
     public ProductResponse(boolean b, String s, String errorMessage){
         super(b,s,errorMessage);
