@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class ShipmentController {
 
     private final ShipmentService shipmentService;
-
     // Place Simple Order Shipment
     @PostMapping(value = "/place/simple/{orderID}")
     public ShipmentResponse placeSimpleOrderShipment(@PathVariable("orderID") int orderID) {

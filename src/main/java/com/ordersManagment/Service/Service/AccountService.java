@@ -23,6 +23,8 @@ public class AccountService {
     }
 
 
-
-
+    public boolean checkAccountBalance(int custID, double balance) {
+        Customer customer = CustomerDB.getInstance(custID);
+        return (customer.getBalance() >= balance);
+    }
 }

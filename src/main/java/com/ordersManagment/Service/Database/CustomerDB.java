@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.util.ArrayList;
 
 @Setter
-
 /**
  * CustomerDB class
  * used to store customers data
@@ -105,5 +104,4 @@ public class CustomerDB extends Database{
 
         customers.add(object);
     }
-
 }

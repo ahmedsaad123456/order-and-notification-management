@@ -1,5 +1,4 @@
 package com.ordersManagment.Service.Database;
-
 import com.ordersManagment.Service.Model.CompundOrder;
 import com.ordersManagment.Service.Model.Customer;
 import com.ordersManagment.Service.Model.Order;
@@ -13,11 +12,14 @@ import java.util.ArrayList;
 public class OrderDB extends Database{
     @Getter
     private static ArrayList<Order> orders;
-
+  
+    @Getter
+    private static int nextID;
+  
     static {
-        orders = new ArrayList<>();
+        orders = new Vector<>();
+        nextID = 0;
     }
-
 
     public static Order getInstance(int orderID){
         for (Order order : orders) {
@@ -27,9 +29,19 @@ public class OrderDB extends Database{
         }
         return null;
     }
+  
+    public static void addOrder(Order order){
+        orders.add(order);
+        nextID++;
+    }
+
+    public static void deleteOrder(int orderID){
+        orders.remove(getInstance(orderID));
+    }
+
 
     public static Customer getCustomer(Order order){
         return order.getCustomer();
     }
-
 }
+

@@ -9,17 +9,14 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.util.*;
-
 @Service
 public class ShipmentService {
 
     private final AccountService accountService;
-
     @Autowired
     public ShipmentService(AccountService accountService) {
         this.accountService = accountService;
     }
-
 
     /**
      * Ship a simple order and deduct shipping fees from the customer's account.
