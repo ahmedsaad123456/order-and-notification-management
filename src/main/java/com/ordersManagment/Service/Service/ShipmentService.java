@@ -52,12 +52,12 @@ public class ShipmentService {
     public ShipmentResponse shipCompoundOrder(int orderID) {
         Order compoundOrder = OrderDB.getInstance(orderID);
         System.out.println(compoundOrder);
-        if (compoundOrder == null || !(compoundOrder instanceof CompundOrder)) {
+        if (compoundOrder == null || !(compoundOrder instanceof CompoundOrder)) {
             return new ShipmentResponse(false, "Invalid order", "Compound order with ID " + orderID + " not found");
         }
 
         Map<Integer, Address> shipmentAddress = new HashMap<>();
-        for (Order simpleOrder : ((CompundOrder) compoundOrder).getOrders()) {
+        for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
             int customerID = OrderDB.getCustomer(simpleOrder).getID();
            // shipmentAddress.put(customerID, );
         }
@@ -66,10 +66,10 @@ public class ShipmentService {
 //            return new ShipmentResponse(false, "Invalid address", "Address of compound order must be the same for all simple orders");
 //        }
 
-        int numberOfOrders = ((CompundOrder) compoundOrder).getOrders().size();
+        int numberOfOrders = ((CompoundOrder) compoundOrder).getOrders().size();
         double shippingFees = calculateShippingFees() / numberOfOrders;
 
-        for (Order simpleOrder : ((CompundOrder) compoundOrder).getOrders()) {
+        for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
             int customerID = OrderDB.getCustomer(simpleOrder).getID();
             if (!accountService.deductFromAccount(customerID, shippingFees)) {
                 return new ShipmentResponse(false, "Insufficient funds", "Customer does not have enough funds to cover shipping fees");
@@ -120,10 +120,10 @@ public class ShipmentService {
         }
 
         Order compoundOrder = OrderDB.getInstance(shipment.getOrderID());
-        int numberOfOrders = ((CompundOrder) compoundOrder).getOrders().size();
+        int numberOfOrders = ((CompoundOrder) compoundOrder).getOrders().size();
         double refundedFees = calculateShippingFees() / numberOfOrders;
 
-        for (Order simpleOrder : ((CompundOrder) compoundOrder).getOrders()) {
+        for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
             int customerID = OrderDB.getCustomer(simpleOrder).getID();
             accountService.addToAccount(customerID, refundedFees);
         }

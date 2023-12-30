@@ -119,11 +119,6 @@ public class ProductDB extends Database{
         return null;
     }
 
-    @Override
-    public void createInstance(Object object) {
-
-    }
-
     public static void reduceProductAmount(String serialNumber, int amount) {
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getSerialNumber().equals(serialNumber)) {

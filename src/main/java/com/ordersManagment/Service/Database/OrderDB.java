@@ -1,5 +1,5 @@
 package com.ordersManagment.Service.Database;
-import com.ordersManagment.Service.Model.CompundOrder;
+import com.ordersManagment.Service.Model.CompoundOrder;
 import com.ordersManagment.Service.Model.Customer;
 import com.ordersManagment.Service.Model.Order;
 import com.ordersManagment.Service.Model.Product;
@@ -17,7 +17,7 @@ public class OrderDB extends Database{
     private static int nextID;
   
     static {
-        orders = new Vector<>();
+        orders = new ArrayList<>();
         nextID = 0;
     }
 
