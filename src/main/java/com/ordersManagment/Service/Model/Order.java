@@ -11,6 +11,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @NoArgsConstructor
 
+
 public class Order {
     @JsonProperty("products")
     @NonNull
@@ -26,4 +27,3 @@ public class Order {
     private String address;
 
 }
-
