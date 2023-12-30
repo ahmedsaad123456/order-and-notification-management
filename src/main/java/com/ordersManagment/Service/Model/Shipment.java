@@ -28,15 +28,8 @@ public class Shipment {
     Map<Integer, Address> shipmentAddress;
 
     public Shipment() {
-        this.shipmentID = getStaticShipmentID();
-        incrementShipmentID();
-    }
-
-    private static void incrementShipmentID() {
+        this.shipmentID = shipmentIDCounter;
         shipmentIDCounter++;
-    }
-    public static int getStaticShipmentID() {
-        return shipmentIDCounter;
     }
 
 }

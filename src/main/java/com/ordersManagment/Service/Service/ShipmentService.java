@@ -3,6 +3,7 @@ package com.ordersManagment.Service.Service;
 import com.ordersManagment.Service.Database.CustomerDB;
 import com.ordersManagment.Service.Database.OrderDB;
 import com.ordersManagment.Service.Database.ShipmentDB;
+import com.ordersManagment.Service.Enums.OrderStatus;
 import com.ordersManagment.Service.Model.*;
 import com.ordersManagment.Service.Response.ShipmentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,24 +36,11 @@ public class ShipmentService {
         Map<Integer, Address> shipmentAddress = new HashMap<>();
         shipmentAddress.put(customerID, CustomerDB.getAddress(customer.getEmail()));
 
-
-        //        Customer c = CustomerDB.getCustomerByID(customerID);
-//        NotificationSender s = null;
-//        if(c.getPreferredChannel().equals("All")){
-//            s = new EmailNotificationSender();
-//            s = new SMSNotificationSender(s);
-//        } else if (c.getPreferredChannel().equals("Email")){
-//            s = new SMSNotificationSender();
-//
-//        } else if(c.getPreferredChannel().equals("SMS")){
-//            s = new EmailNotificationSender();
-//        }
-//
-//        notificationService = new NotificationService(new ShipmentTemplate(c) , s);
-//        notificationService.sendNotification();
         double shippingFees = calculateShippingFees();
         if (accountService.deductFromAccount(customerID, shippingFees)) {
             ShipmentDB.setShipment(orderID, shipmentAddress);
+            sendShipmentNotification(order);
+            order.setStatus(OrderStatus.Pending);
             return new ShipmentResponse(true, "Shipment successful", ShipmentDB.getShipmentByOrderID(orderID));
         }
         else {
@@ -91,6 +79,11 @@ public class ShipmentService {
             }
         }
         ShipmentDB.setShipment(orderID, shipmentAddress);
+        for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
+            sendShipmentNotification(simpleOrder);
+            simpleOrder.setStatus(OrderStatus.Pending);
+        }
+        compoundOrder.setStatus(OrderStatus.Pending);
         return new ShipmentResponse(true, "Shipment successful", ShipmentDB.getShipmentByOrderID(orderID));
     }
 
@@ -168,6 +161,29 @@ public class ShipmentService {
         long differenceInMillis = shipmentTime.getTime() - currentTime.getTime();
         long differenceInMinutes = differenceInMillis / (60 * 1000);
         return differenceInMinutes < 3;
+    }
+
+    /**
+     * Send notification to customer
+     *
+     * @param order The order to be shipped
+     */
+    private void sendShipmentNotification(Order order){
+        Customer customer = OrderDB.getCustomer(order);
+        NotificationSender s = null;
+        if(customer.getPreferredChannel().equals("All")){
+            s = new EmailNotificationSender();
+            s = new SMSNotificationSender(s);
+        }
+        else if (customer.getPreferredChannel().equals("Email")){
+            s = new SMSNotificationSender();
+
+        }
+        else if(customer.getPreferredChannel().equals("SMS")){
+            s = new EmailNotificationSender();
+        }
+        NotificationService notificationService = new NotificationService(new ShipmentTemplate(order) , s);
+        notificationService.sendNotification();
     }
 
 }
