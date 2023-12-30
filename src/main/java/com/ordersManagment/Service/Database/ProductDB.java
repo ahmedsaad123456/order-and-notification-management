@@ -16,13 +16,13 @@ import java.util.HashMap;
  *
  */
 
-public class ProductDB extends Database{
+public class ProductDB extends Database {
 
     @Getter
     private static ArrayList<Product> products;
 
     @Getter
-    private static HashMap<String , Integer> category;
+    private static HashMap<String, Integer> category;
 
     //------------------------------------------------------------------------------------------------------------
 
@@ -35,6 +35,7 @@ public class ProductDB extends Database{
 
     /**
      * save product in database
+     *
      * @param p product that we want to store it
      */
 
@@ -48,12 +49,11 @@ public class ProductDB extends Database{
     /**
      * update product amount
      *
-     * @param p product that we want to update the amount of it
+     * @param p         product that we want to update the amount of it
      * @param newAmount is the updated amount of the product
-     *
      */
 
-    public static void updateProductAmount(Product p , int newAmount){
+    public static void updateProductAmount(Product p, int newAmount) {
         for (Product product : products) {
             if (product.getSerialNumber().equals(p.getSerialNumber())) {
                 product.setAmount(newAmount);
@@ -69,14 +69,13 @@ public class ProductDB extends Database{
      * @param p product that we get from it the category name that will be updated
      */
 
-    public static void updateCategory(Product p){
-        if(category.containsKey(p.getCategory())){
+    public static void updateCategory(Product p) {
+        if (category.containsKey(p.getCategory())) {
 
             int count = category.get(p.getCategory());
-            category.put(p.getCategory() , count+1);
-        }
-        else{
-            category.put(p.getCategory() , 1);
+            category.put(p.getCategory(), count + 1);
+        } else {
+            category.put(p.getCategory(), 1);
         }
     }
 
@@ -89,7 +88,7 @@ public class ProductDB extends Database{
      * @param s serial number of the product
      * @return the amount of the product if exist and zero if not exist
      */
-    public static int getProductAmountBySerialNumber(String s){
+    public static int getProductAmountBySerialNumber(String s) {
         for (Product product : products) {
             if (product.getSerialNumber().equals(s)) {
                 return product.getAmount();
@@ -109,7 +108,7 @@ public class ProductDB extends Database{
      * @return the product if exist and null if not exist
      */
 
-    public static Product getProductBySerialNumber(String serialNumber){
+    public static Product getProductBySerialNumber(String serialNumber) {
         for (Product product : products) {
             if (product.getSerialNumber().equals(serialNumber)) {
                 return product;
@@ -122,6 +121,7 @@ public class ProductDB extends Database{
     public static void reduceProductAmount(String serialNumber, int amount) {
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getSerialNumber().equals(serialNumber)) {
+                category.put(products.get(i).getCategory(), category.get(products.get(i).getCategory()) - amount);
                 products.get(i).setAmount(products.get(i).getAmount() - amount);
                 break;
             }
