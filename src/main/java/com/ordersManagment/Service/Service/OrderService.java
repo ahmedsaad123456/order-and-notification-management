@@ -18,14 +18,18 @@ public class OrderService {
     public boolean checkSimpleOrderAvailability(ArrayList<Product> orderList) {
         ArrayList<Product> availableProducts = ProductDB.getProducts();
         for (Product product : orderList) {
+            boolean flag = false;
             for (Product availableProduct : availableProducts) {
                 if (product.getSerialNumber().equals(availableProduct.getSerialNumber())) {
                     if (product.getAmount() > availableProduct.getAmount()) {
                         return false;
                     }
+                    flag = true;
                     break;
                 }
             }
+            if(!flag)
+                return false;
         }
         return true;
     }
@@ -189,5 +193,9 @@ public class OrderService {
         long differenceInMillis = orderTime.getTime() - currentTime.getTime();
         long differenceInMinutes = differenceInMillis / (60 * 1000);
         return differenceInMinutes < 3;
+    }
+
+    public OrderStatus checkOrderStatus(int orderID){
+        return OrderDB.getInstance(orderID).getStatus();
     }
 }
