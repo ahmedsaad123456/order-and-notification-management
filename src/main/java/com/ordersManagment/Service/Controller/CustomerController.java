@@ -1,4 +1,5 @@
 package com.ordersManagment.Service.Controller;
+import com.ordersManagment.Service.Model.loginRequest;
 import com.ordersManagment.Service.Response.CustomerResponse;
 import com.ordersManagment.Service.Service.CustomerService;
 import lombok.*;
@@ -33,8 +34,10 @@ public class CustomerController {
     //------------------------------------------------------------------------------------------------------------
 
     // login
-    @GetMapping(value = "/login/{email}/{password}")
-    public CustomerResponse login(@PathVariable("email") String email, @PathVariable("password") String password){
+    @PostMapping(value = "/login")
+    public CustomerResponse login(@RequestBody loginRequest loginRequest){
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
 
         return CustomerService.login(email, password);
     }
