@@ -60,6 +60,10 @@ public class OrderService {
         for (Product product : orderList) {
             for (Product availableProduct : availableProducts) {
                 if (product.getSerialNumber().equals(availableProduct.getSerialNumber())) {
+                    product.setName(availableProduct.getName());
+                    product.setCategory(availableProduct.getCategory());
+                    product.setVendor(availableProduct.getVendor());
+                    product.setPrice(availableProduct.getPrice());
                     ProductDB.reduceProductAmount(product.getSerialNumber(), product.getAmount());
                 }
             }
@@ -83,6 +87,10 @@ public class OrderService {
             for (Product product : currentOrder) {
                 for (Product availableProduct : availableProducts) {
                     if (product.getSerialNumber().equals(availableProduct.getSerialNumber())) {
+                        product.setName(availableProduct.getName());
+                        product.setCategory(availableProduct.getCategory());
+                        product.setVendor(availableProduct.getVendor());
+                        product.setPrice(availableProduct.getPrice());
                         ProductDB.reduceProductAmount(product.getSerialNumber(), product.getAmount());
                     }
                 }
