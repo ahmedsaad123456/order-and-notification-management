@@ -1,6 +1,7 @@
 package com.ordersManagment.Service.Service;
 
 import com.ordersManagment.Service.Database.CustomerDB;
+import com.ordersManagment.Service.Database.MostNotificationTemplateDB;
 import com.ordersManagment.Service.Model.Customer;
 import com.ordersManagment.Service.Model.Order;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 public abstract class Template {
 
 
-    private Order order;
+    protected Order order;
 
 
 
@@ -29,6 +30,9 @@ public abstract class Template {
     public abstract String getMessage();
 
     protected String replacePlaceholders(String template) {
+
+        MostNotificationTemplateDB.addTemplate(template);
+
         Customer customer = CustomerDB.getCustomerByID(order.getCustomer().getID());
         // Replace {customerName} with actual customer name
         assert customer != null;

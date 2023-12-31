@@ -11,7 +11,7 @@ public class ShipmentTemplate extends Template{
     }
 
     public String getMessage() {
-        String temp = ShipmentTemplateDB.getTemplate();
+        String temp = ShipmentTemplateDB.getTemplate(order.getCustomer());
 
         return replacePlaceholders(temp);
     }

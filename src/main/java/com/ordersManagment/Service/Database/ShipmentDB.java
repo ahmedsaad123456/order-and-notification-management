@@ -16,7 +16,12 @@ public class ShipmentDB extends Database{
         shipments = new ArrayList<>();
     }
 
-    public static Shipment getShipment(int shipmentID){
+    /**
+     * get shipment by shipment id
+     * @param shipmentID shipment id that we want to get shipment by it
+     * @return shipment that has the same shipment id
+     */
+    public static Shipment getShipmentByShipmentID(int shipmentID){
         for (Shipment shipment : shipments) {
             if (shipment.getShipmentID() == shipmentID) {
                 return shipment;
@@ -24,6 +29,12 @@ public class ShipmentDB extends Database{
         }
         return null;
     }
+
+    /**
+     * get shipment by order id
+     * @param orderID order id that we want to get shipment by it
+     * @return shipment that has the same order id
+     */
 
     public static Shipment getShipmentByOrderID(int orderID){
         for (Shipment shipment : shipments) {
@@ -34,16 +45,11 @@ public class ShipmentDB extends Database{
         return null;
     }
 
-    public static boolean checkAddress( Map<Integer, String> shipmentAddress) {
-        for (Map.Entry<Integer, String> entry : shipmentAddress.entrySet()) {
-            if (entry.getValue().equals("")) {
-                return false;
-            }
-        }
-        return true;
-
-    }
-
+    /**
+     * set shipment for order and save it in database
+     * @param orderID order id that we want to set shipment for it
+     * @param shipmentAddress shipment address that we want to set for order to be shipped to it
+     */
     public static void setShipment(int orderID, Map<Integer, Address> shipmentAddress) {
         Shipment shipment = new Shipment();
         shipment.setOrderID(orderID);
@@ -54,10 +60,18 @@ public class ShipmentDB extends Database{
     }
 
 
+    /**
+     * save shipment in database
+     * @param shipment shipment that we want to save it
+     */
    public static void saveShipment(Shipment shipment){
         shipments.add(shipment);
     }
 
+    /**
+     * remove shipment from database
+     * @param shipment shipment that we want to remove it
+     */
     public static void removeShipment(Shipment shipment){
         shipments.remove(shipment);
     }
