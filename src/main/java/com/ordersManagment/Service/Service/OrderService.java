@@ -28,7 +28,7 @@ public class OrderService {
                     break;
                 }
             }
-            if(!flag)
+            if (!flag)
                 return false;
         }
         return true;
@@ -65,7 +65,7 @@ public class OrderService {
             }
         }
         assert CustomerDB.getCustomerByID(customerID) != null;
-        SimpleOrder order = new SimpleOrder(orderList, CustomerDB.getCustomerByID(customerID), OrderDB.getNextID(), OrderStatus.Placed, CustomerDB.getCustomerByID(customerID).getAddress(), new Time(new Date().getTime()));
+        SimpleOrder order = new SimpleOrder(orderList, CustomerDB.getCustomerByID(customerID), OrderDB.getNextID(), OrderStatus.Placed, new Time(new Date().getTime()));
         OrderDB.addOrder(order);
         Customer c = order.getCustomer();
         NotificationService notificationService = new NotificationService(new OrderTemplate(order));
@@ -116,16 +116,16 @@ public class OrderService {
     public float calcutateOrder(ArrayList<Product> orderList) {
         float orderSum = 0;
         for (Product product : orderList) {
-            orderSum += (float) (product.getAmount() * product.getPrice());
+            orderSum += (float) (product.getAmount() * ProductDB.getProductBySerialNumber(product.getSerialNumber()).getPrice());
         }
         return orderSum;
     }
 
-    public boolean checkAddress(ArrayList<Order> orderList){
+    public boolean checkAddress(ArrayList<Order> orderList) {
         String[] address = orderList.get(0).getCustomer().getAddress().split("/");
-        for(Order value: orderList){
+        for (Order value : orderList) {
             String[] newAddress = value.getCustomer().getAddress().split("/");
-            if(!address[0].equals(newAddress[0]) || !address[1].equals(newAddress[1])){
+            if (!address[0].equals(newAddress[0]) || !address[1].equals(newAddress[1])) {
                 return false;
             }
         }
@@ -162,7 +162,7 @@ public class OrderService {
         OrderDB.deleteOrder(orderID);
     }
 
-    public ArrayList<Order> getOrders(){
+    public ArrayList<Order> getOrders() {
         return OrderDB.getOrders();
     }
 
@@ -173,7 +173,7 @@ public class OrderService {
         return differenceInMinutes < 3;
     }
 
-    public OrderStatus checkOrderStatus(int orderID){
+    public OrderStatus checkOrderStatus(int orderID) {
         return OrderDB.getInstance(orderID).getStatus();
     }
 }

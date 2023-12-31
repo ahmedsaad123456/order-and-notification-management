@@ -26,9 +26,6 @@ public class Order {
 
     private OrderStatus status;
 
-    @JsonProperty("address")
-    private String address;
-
     Time orderTime;
     //-------------------------------------------------------------
 
