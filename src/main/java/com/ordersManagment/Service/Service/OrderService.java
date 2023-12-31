@@ -180,6 +180,14 @@ public class OrderService {
         return differenceInMinutes < 3;
     }
 
+    public boolean checkIfUserExist(ArrayList<Order> orders){
+        for (int i = 0; i < orders.size(); i++) {
+            if(CustomerDB.getCustomerByID(orders.get(i).getOrderID()) == null)
+                return false;
+        }
+        return true;
+    }
+
     public OrderStatus checkOrderStatus(int orderID) {
         return OrderDB.getInstance(orderID).getStatus();
     }

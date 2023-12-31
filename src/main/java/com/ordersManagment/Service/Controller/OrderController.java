@@ -44,7 +44,7 @@ public class OrderController {
 
     @PostMapping("/add-compound-order")
     public OrderResponse addComplexOrder(@RequestBody ArrayList<Order> orderList, @RequestParam int customerID) {
-        if (CustomerDB.getCustomerByID(customerID) == null) {
+        if (!orderService.checkIfUserExist(orderList)) {
             return new OrderResponse(false, "Order is Not added", "Invalid customer ID");
         }
         if (!orderService.checkCompoundOrderAvailability(orderList)) {
