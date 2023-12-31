@@ -83,7 +83,7 @@ public class OrderService {
             for (Product product : currentOrder) {
                 for (Product availableProduct : availableProducts) {
                     if (product.getSerialNumber().equals(availableProduct.getSerialNumber())) {
-                        ProductDB.reduceProductAmount(currentOrder.get(i).getSerialNumber(), currentOrder.get(i).getAmount());
+                        ProductDB.reduceProductAmount(product.getSerialNumber(), product.getAmount());
                     }
                 }
             }
