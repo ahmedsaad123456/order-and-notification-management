@@ -31,12 +31,15 @@ public class ProductService {
     /**
      * add product assuming that the same product has the same serial number
      * so if we add product with serial number is already exist in the database
+     * first it should have the same name then
      * the amount of this product will increase by 1
      *
      * @param p product that we want to add it to the database
-     * @return ProductResponse that contains the product object and the two massages
+     * @return ProductResponse that contains the product object and the three massages
      * one is increased amount +1 when add product with serial number is already exist
-     * two is Added Successfully when add product with serial number isn't exist
+     * two product is existed in system but in different name when add product with serial number is already exist
+     * and in different name
+     * three is Added Successfully when add product with serial number isn't exist
      */
     public ProductResponse addProduct(Product p){
 
@@ -44,7 +47,7 @@ public class ProductService {
 
         if(amount!=0){
             if(!p.getName().equals(ProductDB.getProductBySerialNumber(p.getSerialNumber()).getName())){
-                return new ProductResponse(false , "Added failed" , "product is exist in system but in different name");
+                return new ProductResponse(false , "Added failed" , "product is existed in system but in different name");
             }
 
             ProductDB.updateCategory(p);
