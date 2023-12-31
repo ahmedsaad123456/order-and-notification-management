@@ -48,7 +48,7 @@ public class OrderController {
             return new OrderResponse(false, "Order is Not added", "Invalid customer ID");
         }
         if (!orderService.checkCompoundOrderAvailability(orderList)) {
-            return new OrderResponse(false, "Order is Not added", "Not enough products");
+            return new OrderResponse(false, "Order is Not added", "Order is not available");
         }
         for (Order order : orderList) {
             if (!accountService.checkAccountBalance(order.getCustomer().getID(), orderService.calcutateOrder(order.getProducts()))) {
