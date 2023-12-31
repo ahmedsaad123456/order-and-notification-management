@@ -23,7 +23,7 @@ public class OrderController {
     AccountService accountService;
 
     @PostMapping("/add-simple-order")
-    public OrderResponse addSimpleOrder(@RequestBody ArrayList<Product> orderList, @RequestBody int customerID) {
+    public OrderResponse addSimpleOrder(@RequestBody ArrayList<Product> orderList, @RequestParam int customerID) {
 
         if (CustomerDB.getCustomerByID(customerID) == null) {
             return new OrderResponse(false, "Order is Not added", "Invalid customer ID");
@@ -42,7 +42,7 @@ public class OrderController {
     }
 
     @PostMapping("/add-compound-order")
-    public OrderResponse addComplexOrder(@RequestBody ArrayList<Order> orderList, @RequestBody int customerID) {
+    public OrderResponse addComplexOrder(@RequestBody ArrayList<Order> orderList, @RequestParam int customerID) {
         if (CustomerDB.getCustomerByID(customerID) == null) {
             return new OrderResponse(false, "Order is Not added", "Invalid customer ID");
         }
