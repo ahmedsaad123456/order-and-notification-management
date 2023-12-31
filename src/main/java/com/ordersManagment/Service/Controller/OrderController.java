@@ -1,6 +1,8 @@
 package com.ordersManagment.Service.Controller;
 
 import com.ordersManagment.Service.Database.CustomerDB;
+import com.ordersManagment.Service.Database.OrderDB;
+import com.ordersManagment.Service.Enums.OrderStatus;
 import com.ordersManagment.Service.Model.Order;
 import com.ordersManagment.Service.Model.Product;
 import com.ordersManagment.Service.Response.OrderResponse;
@@ -24,7 +26,6 @@ public class OrderController {
 
     @PostMapping("/add-simple-order")
     public OrderResponse addSimpleOrder(@RequestBody ArrayList<Product> orderList, @RequestParam int customerID) {
-
         if (CustomerDB.getCustomerByID(customerID) == null) {
             return new OrderResponse(false, "Order is Not added", "Invalid customer ID");
         }
@@ -66,7 +67,13 @@ public class OrderController {
     }
 
     @DeleteMapping("/delete-simple-order")
-    public OrderResponse deleteSimpleOrder(@RequestHeader int orderID) {
+    public OrderResponse deleteSimpleOrder(@RequestParam int orderID) {
+        if(OrderDB.getInstance(orderID) == null){
+            return new OrderResponse(false, "Order is not canceled", "Order ID is incorrect");
+        }
+        if(orderService.checkOrderStatus(orderID) != OrderStatus.Placed){
+            return new OrderResponse(false, "Order is not canceled", "Order has been shipped or pending shipment (please cancel shipment first)");
+        }
         if(!orderService.checkOrderTime(orderID)){
             return new OrderResponse(false, "Order is not canceled", "Time is too late");
         }
@@ -75,7 +82,13 @@ public class OrderController {
     }
 
     @DeleteMapping("/delete-compound-order")
-    public OrderResponse deleteCompoundOrder(@RequestHeader int orderID) {
+    public OrderResponse deleteCompoundOrder(@RequestParam int orderID) {
+        if(OrderDB.getInstance(orderID) == null){
+            return new OrderResponse(false, "Order is not canceled", "Order ID is incorrect");
+        }
+        if(orderService.checkOrderStatus(orderID) != OrderStatus.Placed){
+            return new OrderResponse(false, "Order is not canceled", "Order has been shipped or pending shipment (please cancel shipment first)");
+        }
         if(!orderService.checkOrderTime(orderID)){
             return new OrderResponse(false, "Order is not canceled", "Time is too late");
         }
