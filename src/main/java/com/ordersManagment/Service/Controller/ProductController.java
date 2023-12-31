@@ -18,6 +18,7 @@ import java.util.HashMap;
  * ProductController class
  * used to add product assuming that the same product has the same serial number
  * so if we add product with serial number is already exist in the database
+ * first it should have the same name then
  * the amount of this product will increase by 1
  * get product by serial number
  * get all products
