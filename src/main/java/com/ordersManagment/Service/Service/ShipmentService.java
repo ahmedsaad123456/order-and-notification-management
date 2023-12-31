@@ -128,7 +128,8 @@ public class ShipmentService {
         int customerID = OrderDB.getCustomer(OrderDB.getInstance(shipment.getOrderID())).getID();
         double refundedFees = calculateShippingFees();
         accountService.addToAccount(customerID, refundedFees);
-
+        // update order status
+        OrderDB.getInstance(shipment.getOrderID()).setStatus(OrderStatus.Placed);
         ShipmentDB.removeShipment(shipment);
         return new ShipmentResponse(true, "Shipment cancellation successful", shipment);
     }
@@ -161,8 +162,10 @@ public class ShipmentService {
         for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
             int customerID = OrderDB.getCustomer(simpleOrder).getID();
             accountService.addToAccount(customerID, refundedFees);
+            simpleOrder.setStatus(OrderStatus.Placed);
         }
-
+        // update order status
+        compoundOrder.setStatus(OrderStatus.Placed);
         ShipmentDB.removeShipment(shipment);
         return new ShipmentResponse(true, "Shipment cancellation successful", shipment);
     }

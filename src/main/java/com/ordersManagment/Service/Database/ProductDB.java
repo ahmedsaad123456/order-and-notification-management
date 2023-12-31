@@ -16,6 +16,7 @@ import java.util.HashMap;
  *
  */
 
+
 public class ProductDB extends Database {
 
     @Getter
@@ -29,6 +30,15 @@ public class ProductDB extends Database {
     static {
         products = new ArrayList<>();
         category = new HashMap<>();
+
+        products.add(new Product("001", "Phone", "Ahmed", "Electronics", 5000.0, 50));
+        products.add(new Product("002", "Laptop", "John", "Electronics", 10000.0, 30));
+        products.add(new Product("003", "Chair", "Emily", "Furniture", 200.0, 100));
+        products.add(new Product("004", "Shoes", "Sophia", "Fashion", 80.0, 50));
+
+        category.put("Electronics", 80);
+        category.put("Furniture", 100);
+        category.put("Fashion", 50);
     }
 
     //------------------------------------------------------------------------------------------------------------
