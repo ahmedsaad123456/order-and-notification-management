@@ -182,7 +182,7 @@ public class OrderService {
 
     public boolean checkIfUserExist(ArrayList<Order> orders){
         for (int i = 0; i < orders.size(); i++) {
-            if(CustomerDB.getCustomerByID(orders.get(i).getOrderID()) == null)
+            if(CustomerDB.getCustomerByID(orders.get(i).getCustomer().getID()) == null)
                 return false;
         }
         return true;
