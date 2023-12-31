@@ -22,16 +22,13 @@ public class Order {
     @JsonProperty("customer")
     private Customer customer;
 
-    @JsonProperty("orderID")
     private int OrderID;
 
-    @JsonProperty("status")
     private OrderStatus status;
 
     @JsonProperty("address")
     private String address;
 
-    @JsonProperty("orderTime")
     Time orderTime;
     //-------------------------------------------------------------
 

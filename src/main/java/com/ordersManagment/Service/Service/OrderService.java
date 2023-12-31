@@ -74,6 +74,7 @@ public class OrderService {
     public Order addCompoundOrder(ArrayList<Order> orderList, int customerID) {
         ArrayList<Product> availableProducts = ProductDB.getProducts();
         for (int i = 0; i < orderList.size(); i++) {
+            orderList.get(i).setCustomer(CustomerDB.getCustomerByID(orderList.get(i).getCustomer().getID()));
             ArrayList<Product> currentOrder = orderList.get(i).getProducts();
             for (Product product : currentOrder) {
                 for (Product availableProduct : availableProducts) {
