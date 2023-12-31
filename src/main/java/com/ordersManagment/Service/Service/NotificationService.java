@@ -25,7 +25,6 @@ public class NotificationService {
     private Notification notification;
 
 
-
     private NotificationSender notificationSender;
 
     public void chooseChannelAndSend(Customer c ){
@@ -33,11 +32,17 @@ public class NotificationService {
         if (c.getPreferredChannel().equals("All")) {
             s = new EmailNotificationSender();
             s = new SMSNotificationSender(s);
+            SMSNotificationDB.addMobileNumber(c.getMobileNumber());
+            EmailNotificationDB.addEmail(c.getEmail());
         } else if (c.getPreferredChannel().equals("SMS")) {
             s = new SMSNotificationSender();
+            SMSNotificationDB.addMobileNumber(c.getMobileNumber());
+
 
         } else if (c.getPreferredChannel().equals("Email")) {
             s = new EmailNotificationSender();
+            EmailNotificationDB.addEmail(c.getEmail());
+
         }
 
         assert s != null;

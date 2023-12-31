@@ -6,10 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.sql.Time;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -17,8 +14,12 @@ import java.util.concurrent.TimeUnit;
 public class SMSNotificationDB extends Database {
     private static final Queue<Notification> SMSNotification;
 
+    private static final HashMap<String , Integer> notifiedMobileNumber;
+
     static {
         SMSNotification = new LinkedList<>();
+
+        notifiedMobileNumber = new HashMap<>();
     }
 
     public static void addNotification(Notification notification) {
@@ -58,5 +59,29 @@ public class SMSNotificationDB extends Database {
         long notificationMillis = calendar.getTimeInMillis();
 
         return currentTime - notificationMillis > TimeUnit.SECONDS.toMillis(120);
+    }
+
+
+    public static void addMobileNumber(String mobileNumber){
+        notifiedMobileNumber.put(mobileNumber, notifiedMobileNumber.getOrDefault(mobileNumber, 0) + 1);
+    }
+
+    public static HashMap<String , Integer>getAllNotifiedMobileNumber(){
+        return notifiedMobileNumber;
+    }
+
+
+    public static String getMostNotifiedMobileNumber(){
+        if (notifiedMobileNumber.isEmpty()) {
+            return null;
+        }
+
+        Map.Entry<String, Integer> maxEntry = Collections.max(
+                notifiedMobileNumber.entrySet(),
+                Map.Entry.comparingByValue()
+        );
+
+        return maxEntry.getKey();
+
     }
 }
