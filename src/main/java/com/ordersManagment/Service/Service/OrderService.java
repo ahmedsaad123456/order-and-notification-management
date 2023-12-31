@@ -144,24 +144,19 @@ public class OrderService {
     }
 
     public void cancelCompoundOrder(int orderID) {
-        Order order = OrderDB.getInstance(orderID);
-        ArrayList<Order> orderQueue = new ArrayList<>();
-        orderQueue.add(order);
-        while (!orderQueue.isEmpty()) {
-            if(orderQueue.get(0) == null){
-                orderQueue.remove(0);
-                continue;
-            }
-            ArrayList<Order> orders = ((CompoundOrder)orderQueue.get(0)).getOrders();
-            for (Order value : orders) {
-                orderQueue.add(value);
-            }
-            ArrayList<Product> orderProducts = orderQueue.get(0).getProducts();
+        CompoundOrder order = (CompoundOrder)OrderDB.getInstance(orderID);
+        ArrayList<Product> orderProducts = order.getProducts();
+        for (Product orderProduct : orderProducts) {
+            ProductDB.increaseProductAmount(orderProduct.getSerialNumber(), orderProduct.getAmount());
+        }
+        accountService.addToAccount(order.getCustomer().getID(), calcutateOrder(orderProducts));
+        ArrayList<Order> orders = order.getOrders();
+        for(Order ord: orders){
+            orderProducts = ord.getProducts();
             for (Product orderProduct : orderProducts) {
                 ProductDB.increaseProductAmount(orderProduct.getSerialNumber(), orderProduct.getAmount());
             }
-            accountService.addToAccount(orderQueue.get(0).getCustomer().getID(), calcutateOrder(orderProducts));
-            orderQueue.remove(0);
+            accountService.addToAccount(ord.getCustomer().getID(), calcutateOrder(orderProducts));
         }
         OrderDB.deleteOrder(orderID);
     }
