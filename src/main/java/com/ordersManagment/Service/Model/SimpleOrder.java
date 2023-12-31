@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 
 public class SimpleOrder extends Order {
-    public SimpleOrder(ArrayList<Product> products, Customer customer, int orderID, OrderStatus orderStatus, String address, Time time) {
-        super(products, customer, orderID, orderStatus, address, time);
+    public SimpleOrder(ArrayList<Product> products, Customer customer, int orderID, OrderStatus orderStatus, Time time) {
+        super(products, customer, orderID, orderStatus, time);
     }
 }
