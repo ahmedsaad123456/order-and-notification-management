@@ -9,6 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * OrderTemplateDB class
+ *
+ * used to store order templates in different language and different number of placeholders according to Customer attributes
+ * this is not violate OCP because if this app will be real app we allow admin to add new template in any language
+ * by create endpoint for that
+ *
+ *
+ *
+ */
+
 public class OrderTemplateDB extends Database {
 
     private static final HashMap<String, List<String>> orderTemplates;
@@ -29,6 +40,16 @@ public class OrderTemplateDB extends Database {
         ));
     }
 
+    //------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * get random template from list according to customer language
+     *
+     * @param customer to know the language
+     * @return random template
+     */
+
     public static String getTemplate(Customer customer) {
         Random random = new Random();
         List<String> templates = orderTemplates.get(customer.getLanguage());
@@ -40,4 +61,8 @@ public class OrderTemplateDB extends Database {
 
         return templates.get(randomIndex);
     }
+
+
+    //------------------------------------------------------------------------------------------------------------
+
 }

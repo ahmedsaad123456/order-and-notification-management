@@ -16,6 +16,15 @@ import org.springframework.stereotype.Service;
 @Setter
 @Service
 
+/**
+ *
+ * Template class
+ *
+ *
+ * used to get message and replace placeholders with the customer attributes
+ *
+ *
+ */
 
 
 public abstract class Template {
@@ -24,11 +33,21 @@ public abstract class Template {
     protected Order order;
 
 
-
-
-
+    /**
+     * abstract method to get message
+     *
+     * @return message
+     */
     public abstract String getMessage();
 
+    //------------------------------------------------------------------------------------------------------------
+
+    /**
+     * replace placeholders in the template with the customer attributes
+     *
+     * @param template of the message
+     * @return message after replace the placeholders
+     */
     protected String replacePlaceholders(String template) {
 
         MostNotificationTemplateDB.addTemplate(template);
@@ -55,4 +74,8 @@ public abstract class Template {
 
         return template;
     }
+
+
+    //------------------------------------------------------------------------------------------------------------
+
 }

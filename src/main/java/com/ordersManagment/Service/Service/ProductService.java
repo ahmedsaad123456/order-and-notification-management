@@ -40,16 +40,23 @@ public class ProductService {
      */
     public ProductResponse addProduct(Product p){
 
-        ProductDB.updateCategory(p);
         int amount = ProductDB.getProductAmountBySerialNumber(p.getSerialNumber());
 
         if(amount!=0){
+            if(!p.getName().equals(ProductDB.getProductBySerialNumber(p.getSerialNumber()).getName())){
+                return new ProductResponse(false , "Added failed" , "product is exist in system but in different name");
+            }
+
+            ProductDB.updateCategory(p);
             ProductDB.updateProductAmount(p , amount+1);
+            p.setAmount(amount+1);
             return new ProductResponse(true , "increased amount +1" , p);
 
         }
         else{
+            ProductDB.updateCategory(p);
             ProductDB.saveProduct(p);
+            p.setAmount(1);
             return new ProductResponse(true , "Added Successfully" , p);
 
         }

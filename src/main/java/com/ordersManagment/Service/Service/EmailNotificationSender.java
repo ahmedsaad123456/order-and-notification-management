@@ -8,6 +8,13 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 
+/**
+ *
+ * EmailNotificationSender class
+ *
+ * used to send notification to emails
+ *
+ */
 public class EmailNotificationSender implements NotificationSender{
 
     private final NotificationSender notificationSender;
@@ -16,6 +23,15 @@ public class EmailNotificationSender implements NotificationSender{
         this.notificationSender = null;
     }
 
+
+    //------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * send notification to email and to other channels of notification sender if is not null
+     *
+     * @param notification that will be sent
+     */
     @Override
     public void sendNotification(Notification notification) {
         EmailNotificationDB.addNotification(notification);
@@ -23,4 +39,8 @@ public class EmailNotificationSender implements NotificationSender{
             notificationSender.sendNotification(notification);
         }
     }
+
+
+    //------------------------------------------------------------------------------------------------------------
+
 }
