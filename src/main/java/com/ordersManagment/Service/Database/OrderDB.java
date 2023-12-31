@@ -18,7 +18,7 @@ public class OrderDB extends Database{
   
     static {
         orders = new ArrayList<>();
-        nextID = 0;
+        nextID = 1;
     }
 
     public static Order getInstance(int orderID){
