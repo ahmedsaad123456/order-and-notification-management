@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Service
 public class OrderService {
-    AccountService accountService;
+    AccountService accountService = new AccountService();
 
     public boolean checkSimpleOrderAvailability(ArrayList<Product> orderList) {
         ArrayList<Product> availableProducts = ProductDB.getProducts();
@@ -144,13 +144,17 @@ public class OrderService {
     }
 
     public void cancelCompoundOrder(int orderID) {
-        CompoundOrder order = (CompoundOrder) OrderDB.getInstance(orderID);
-        ArrayList<CompoundOrder> orderQueue = new ArrayList<>();
+        Order order = OrderDB.getInstance(orderID);
+        ArrayList<Order> orderQueue = new ArrayList<>();
         orderQueue.add(order);
         while (!orderQueue.isEmpty()) {
-            ArrayList<Order> orders = orderQueue.get(0).getOrders();
+            if(orderQueue.get(0) == null){
+                orderQueue.remove(0);
+                continue;
+            }
+            ArrayList<Order> orders = ((CompoundOrder)orderQueue.get(0)).getOrders();
             for (Order value : orders) {
-                orderQueue.add((CompoundOrder) value);
+                orderQueue.add(value);
             }
             ArrayList<Product> orderProducts = orderQueue.get(0).getProducts();
             for (Product orderProduct : orderProducts) {

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class CompoundOrder extends Order{
 
-    private ArrayList<Order> orders;
+    private ArrayList<Order> orders = new ArrayList<>();
 
 
     public void addOrder(Order order){
