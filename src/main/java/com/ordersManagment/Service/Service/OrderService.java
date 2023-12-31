@@ -99,16 +99,16 @@ public class OrderService {
         Time time = new Time(new Date().getTime());
         CompoundOrder order = new CompoundOrder();
         for (Order value : orderList) {
+            value.setOrderID(OrderDB.getNextID());
+            value.setStatus(OrderStatus.Placed);
+            value.setOrderTime(time);
             if (value.getCustomer().getID() == customerID) {
                 order.setProducts(value.getProducts());
-                order.setOrderID(OrderDB.getNextID());
-                order.setStatus(OrderStatus.Placed);
+                order.setOrderID(value.getOrderID());
+                order.setStatus(value.getStatus());
                 order.setCustomer(value.getCustomer());
-                order.setOrderTime(time);
+                order.setOrderTime(value.getOrderTime());
             } else {
-                value.setOrderID(OrderDB.getNextID());
-                value.setStatus(OrderStatus.Placed);
-                value.setOrderTime(time);
                 order.addOrder(value);
             }
         }
