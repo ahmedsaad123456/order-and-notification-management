@@ -122,9 +122,9 @@ public class OrderService {
     }
 
     public boolean checkAddress(ArrayList<Order> orderList) {
-        String[] address = orderList.get(0).getCustomer().getAddress().split("/");
+        String[] address = CustomerDB.getCustomerByID(orderList.get(0).getCustomer().getID()).getAddress().split("/");
         for (Order value : orderList) {
-            String[] newAddress = value.getCustomer().getAddress().split("/");
+            String[] newAddress = CustomerDB.getCustomerByID(value.getCustomer().getID()).getAddress().split("/");
             if (!address[0].equals(newAddress[0]) || !address[1].equals(newAddress[1])) {
                 return false;
             }
