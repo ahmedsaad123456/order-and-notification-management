@@ -8,11 +8,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+/**
+ * StatisticsService class
+ *
+ * used to get statistics
+ *
+ */
 @Service
 public class StatisticsService {
 
 
-
+    /**
+     * get all notified emails with the most notified one
+     *
+     * @return response with message and if there is notified email
+     * the response will include all notified emails with the most notified one
+     */
     public StatisticsResponse getAllNotifiedEmailsAndMostNotifiedOnes(){
         String mostNotifiedEmail = EmailNotificationDB.getMostNotifiedEmail();
         if(mostNotifiedEmail!=null){
@@ -26,7 +37,15 @@ public class StatisticsService {
 
     }
 
+    //------------------------------------------------------------------------------------------------------------
 
+
+    /**
+     * get all notified mobile number with the most notified one
+     *
+     * @return response with message and if there is notified mobile number
+     * the response will include all notified mobile numbers with the most notified one
+     */
     public StatisticsResponse getAllNotifiedMobileAndMostNotifiedOnes(){
         String mostNotifiedMobile = SMSNotificationDB.getMostNotifiedMobileNumber();
         if(mostNotifiedMobile!=null){
@@ -40,6 +59,14 @@ public class StatisticsService {
     }
 
 
+    //------------------------------------------------------------------------------------------------------------
+
+    /**
+     * get all sent notified template with the most notified one
+     *
+     * @return response with message and if there is sent notified template
+     * the response will include all sent notified template with the most sent notified one
+     */
     public StatisticsResponse getAllSentTemplateAndMostSentOnes(){
         String mostSentTemplate = MostNotificationTemplateDB.getMostSentTemplate();
         if(mostSentTemplate!=null){
@@ -51,6 +78,10 @@ public class StatisticsService {
         return new StatisticsResponse(false , "Templates not found" , "There are no template sent yet");
 
     }
+
+
+    //------------------------------------------------------------------------------------------------------------
+
 
 
 

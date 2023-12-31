@@ -11,17 +11,21 @@ import java.util.HashMap;
 @Setter
 public class StatisticsResponse extends Response {
 
-    private HashMap<String , String> MostData;
-    private HashMap<String , Integer> AllData;
+    // store the most one
+    private HashMap<String , String> mostData;
+
+    // store all data
+    private HashMap<String , Integer> allData;
 
 
 
 
+    //------------------------------------------------------------------------------------------------------------
 
     public StatisticsResponse(boolean b, String s, HashMap<String, String> m , HashMap<String ,Integer> a){
         super(b,s);
-        this.MostData = m;
-        this.AllData = a;
+        this.mostData = m;
+        this.allData = a;
     }
 
 
