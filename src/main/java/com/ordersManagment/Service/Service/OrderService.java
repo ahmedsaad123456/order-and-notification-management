@@ -164,7 +164,7 @@ public class OrderService {
 
     public boolean checkOrderTime(int orderID) {
         Time currentTime = new Time(new Date().getTime()), orderTime = OrderDB.getInstance(orderID).getOrderTime();
-        long differenceInMillis = orderTime.getTime() - currentTime.getTime();
+        long differenceInMillis = currentTime.getTime() - orderTime.getTime();
         long differenceInMinutes = differenceInMillis / (60 * 1000);
         return differenceInMinutes < 3;
     }
