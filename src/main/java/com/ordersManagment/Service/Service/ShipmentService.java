@@ -81,6 +81,8 @@ public class ShipmentService {
             int customerID = customer.getID();
             shipmentAddress.put(customerID, CustomerDB.getAddress(customer.getEmail()));
         }
+        int custID = OrderDB.getCustomer(compoundOrder).getID();
+        shipmentAddress.put(custID, CustomerDB.getAddress(OrderDB.getCustomer(compoundOrder).getEmail()));
 
         // calculate shipping fees that participate in compound order and deduct from each customer account if possible
         int numberOfOrders = ((CompoundOrder) compoundOrder).getOrders().size();
@@ -93,6 +95,9 @@ public class ShipmentService {
                 return new ShipmentResponse(false, "Insufficient funds", "Customer does not have enough funds to cover shipping fees");
             }
         }
+        if (!accountService.deductFromAccount(custID, shippingFees)) {
+            return new ShipmentResponse(false, "Insufficient funds", "Customer does not have enough funds to cover shipping fees");
+        }
         ShipmentDB.setShipment(orderID, shipmentAddress);
 
         // send notification to each customer and update order status
@@ -100,6 +105,7 @@ public class ShipmentService {
             sendShipmentNotification(simpleOrder);
             simpleOrder.setStatus(OrderStatus.Pending);
         }
+        sendShipmentNotification(compoundOrder);
         compoundOrder.setStatus(OrderStatus.Pending);
         return new ShipmentResponse(true, "Shipment successful", ShipmentDB.getShipmentByOrderID(orderID));
     }
@@ -159,6 +165,7 @@ public class ShipmentService {
         int numberOfOrders = ((CompoundOrder) compoundOrder).getOrders().size();
         double refundedFees = (calculateShippingFees() + numberOfOrders * 5) / numberOfOrders;
 
+        accountService.addToAccount(OrderDB.getCustomer(compoundOrder).getID(), refundedFees);
         for (Order simpleOrder : ((CompoundOrder) compoundOrder).getOrders()) {
             int customerID = OrderDB.getCustomer(simpleOrder).getID();
             accountService.addToAccount(customerID, refundedFees);
