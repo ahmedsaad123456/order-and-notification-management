@@ -6,18 +6,26 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.sql.Time;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 @Configuration
 @EnableScheduling
 public class EmailNotificationDB extends Database{
     private static final Queue<Notification> EmailNotification;
 
+    private static final HashMap<String, Integer> notifiedEmails;
+
     static {
         EmailNotification = new LinkedList<>();
+
+        notifiedEmails = new HashMap<>();
+
+        notifiedEmails.put("ahmed" , 3);
+
+        notifiedEmails.put("ali" , 5);
+
+        notifiedEmails.put("mhmd" , 4);
+
     }
 
     public static void addNotification(Notification notification) {
@@ -59,5 +67,30 @@ public class EmailNotificationDB extends Database{
         long notificationMillis = calendar.getTimeInMillis();
 
         return currentTime - notificationMillis > TimeUnit.SECONDS.toMillis(120);
+    }
+
+    public static void addEmail(String email){
+
+        notifiedEmails.put(email, notifiedEmails.getOrDefault(email, 0) + 1);
+
+    }
+
+    public static HashMap<String , Integer>getAllNotifiedEmails(){
+        return notifiedEmails;
+    }
+
+
+    public static String getMostNotifiedEmail(){
+        if (notifiedEmails.isEmpty()) {
+            return null;
+        }
+
+        Map.Entry<String, Integer> maxEntry = Collections.max(
+                notifiedEmails.entrySet(),
+                Map.Entry.comparingByValue()
+        );
+
+        return maxEntry.getKey();
+
     }
 }
